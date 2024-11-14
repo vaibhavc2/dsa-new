@@ -12,6 +12,7 @@ using namespace std;
 // @lc code=start
 class Solution
 {
+    // see the explanation below => Matrix Exponentiation in Solution5 for more details
     void multiply(vector<vector<int>> &M, vector<vector<int>> &A)
     {
         int M11 = M[0][0] * A[0][0] + M[0][1] * A[1][0];

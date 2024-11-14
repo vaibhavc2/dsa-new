@@ -67,6 +67,19 @@ string CONVERT_TO_BINARY(ll s)
     reverse(res.begin(), res.end());
     return res;
 }
+int EXPONENT(int x, int y)
+{
+    int res = 1;
+    // time complexity is O(log(n))
+    while (y)
+    {
+        if (y % 2)
+            res = res * x;
+        x = x * x;
+        y /= 2;
+    }
+    return res;
+}
 bool PALIN(string s)
 {
     ll i = 0;
