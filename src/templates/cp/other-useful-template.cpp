@@ -28,6 +28,21 @@ const ll N = 3e5 + 5;
 const ll MAX = 3e5 + 5;
 const ll M = 1e6 + 5;
 const int mod = 1e18 + 7;
+
+inline void convert_str_to_lowercase(string &s) {
+    transform(s.begin(), s.end(), s.begin(),
+              [](unsigned char c) { return tolower(c); });
+}
+
+inline void trim(string &str) {
+    size_t first = str.find_first_not_of(' ');
+    if (string::npos == first) {
+        return;
+    }
+    size_t last = str.find_last_not_of(' ');
+    str = str.substr(first, (last - first + 1));
+}
+
 ll MODULAR_POWER(ll a, ll b, ll MOD)
 {
     if (b == 0)
