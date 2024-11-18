@@ -1,3 +1,4 @@
+// ---------- CP SETUP ---------- //
 #pragma GCC optimize("O3,unroll-loops")
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,lzcnt,abm,bmi,bmi2,mmx,avx,avx2,fma")
 
@@ -119,6 +120,7 @@ inline void string_array_input(vector<string> &v) {
         getline(cin, v[i]);
 }
 
+//*/*-------------- SOLUTION --------------*/*//
 // !! xxxxxxxx !! START FROM HERE !! xxxxxxxx !!
 /*
  * @lc app=leetcode id=121 lang=cpp
@@ -128,23 +130,13 @@ inline void string_array_input(vector<string> &v) {
 
 // @lc code=start
 class Solution {
-public:
-    int maxProfit(vector<int>& prices) {
-        int buyPrice = prices[0];
-        int profit = 0;
-
-        for (int i = 1; i < prices.size(); i++) {
-            if (buyPrice > prices[i]) {
-                buyPrice = prices[i];
-            } else if (prices[i] - buyPrice > profit) {
-                profit = prices[i] - buyPrice;
-            }
-        }
-
-        return profit;        
+   public:
+    int maxProfit(vector<int> &prices) {
     }
 };
 // @lc code=end
+
+//*/*-------------- SOLUTIONS --------------*/*//
 
 // Unoptimized solution - Brute force
 // Time complexity: O(n^2) -> TLE
@@ -172,10 +164,10 @@ class Solution1 {
 // Time complexity: O(n)
 // Space complexity: O(1)
 class Solution2 {
-public:
-    int maxProfit(vector<int>& prices) {
-        int buyPrice = prices[0]; // buy price initialized with first day price
-        int profit = 0; // profit initialized with 0
+   public:
+    int maxProfit(vector<int> &prices) {
+        int buyPrice = prices[0];  // buy price initialized with first day price
+        int profit = 0;            // profit initialized with 0
 
         for (int i = 1; i < prices.size(); i++) {
             // if current price is less than buy price, update buy price
@@ -187,9 +179,11 @@ public:
             }
         }
 
-        return profit;        
+        return profit;
     }
 };
+
+//*/*-------------- SOLUTIONS --------------*/*//
 
 inline void solve() {
     int n;

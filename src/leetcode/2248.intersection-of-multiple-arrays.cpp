@@ -1,3 +1,4 @@
+// ---------- CP SETUP ---------- //
 #pragma GCC optimize("O3,unroll-loops")
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,lzcnt,abm,bmi,bmi2,mmx,avx,avx2,fma")
 
@@ -119,6 +120,7 @@ inline void string_array_input(vector<string> &v) {
         getline(cin, v[i]);
 }
 
+//*/*-------------- SOLUTION --------------*/*//
 // !! xxxxxxxx !! START FROM HERE !! xxxxxxxx !!
 /*
  * @lc app=leetcode id=2248 lang=cpp
@@ -128,6 +130,19 @@ inline void string_array_input(vector<string> &v) {
 
 // @lc code=start
 class Solution {
+   public:
+    vector<int> intersection(vector<vector<int>> &nums) {
+    }
+};
+// @lc code=end
+
+
+//*/*-------------- SOLUTIONS --------------*/*//
+
+// Hashing
+// Time complexity: O(n * m)
+// Space complexity: O(n)
+class Solution1 {
    public:
     vector<int> intersection(vector<vector<int>> &nums) {
         unordered_map<int, int> mp;
@@ -150,7 +165,9 @@ class Solution {
         return results;
     }
 };
-// @lc code=end
+
+//*/*-------------- SOLUTIONS --------------*/*//
+
 
 inline void solve() {
     int n;
@@ -169,6 +186,7 @@ inline void solve() {
     for (auto x : ans)
         cout << x << " ";
 }
+
 
 int32_t main() {
     fastIO();

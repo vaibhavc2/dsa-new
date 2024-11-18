@@ -1,3 +1,4 @@
+// ---------- CP SETUP ---------- //
 #pragma GCC optimize("O3,unroll-loops")
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,lzcnt,abm,bmi,bmi2,mmx,avx,avx2,fma")
 
@@ -42,6 +43,7 @@ inline void string_array_input(vector<string> &v) {
         getline(cin, v[i]);
 }
 
+//*/*-------------- SOLUTION --------------*/*//
 // !! xxxxxxxx !! START FROM HERE !! xxxxxxxx !!
 /*
  * @lc app=leetcode id=125 lang=cpp
@@ -53,20 +55,11 @@ inline void string_array_input(vector<string> &v) {
 class Solution {
    public:
     bool isPalindrome(string &s) {
-        int i = 0, j = s.size() - 1;
-        while (i < j) {
-            while (i < j && !isalnum(s[i])) ++i;
-            while (i < j && !isalnum(s[j])) --j;
-
-            if (tolower(s[i]) != tolower(s[j])) return false;
-
-            ++i;
-            --j;
-        }
-        return true;
     }
 };
 // @lc code=end
+
+//*/*-------------- SOLUTIONS --------------*/*//
 
 // Two pointer approach - 1
 // Time complexity: O(n)
@@ -141,6 +134,8 @@ class Solution3 {
         return checkPalindrome(s, i + 1, j - 1);
     }
 };
+
+//*/*-------------- SOLUTIONS --------------*/*//
 
 inline void solve() {
     // int n;

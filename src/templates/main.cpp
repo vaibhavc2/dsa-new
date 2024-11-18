@@ -1,3 +1,4 @@
+// ---------- CP SETUP ---------- //
 #pragma GCC optimize("O3,unroll-loops")
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,lzcnt,abm,bmi,bmi2,mmx,avx,avx2,fma")
 
@@ -118,7 +119,7 @@ inline void string_array_input(vector<string> &v) {
     for (int32_t i = 0; i < static_cast<int32_t>(v.size()); i++)
         getline(cin, v[i]);
 }
-
+//*/*-------------- SOLUTION --------------*/*//
 // !! xxxxxxxx !! START FROM HERE !! xxxxxxxx !!
 // @lc code=start
 class Solution {
@@ -128,6 +129,12 @@ class Solution {
     }
 };
 // @lc code=end
+
+
+//*/*-------------- SOLUTIONS --------------*/*//
+
+//*/*-------------- SOLUTIONS --------------*/*//
+
 
 inline void solve() {
     int n;

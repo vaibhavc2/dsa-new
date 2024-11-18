@@ -1,3 +1,4 @@
+// ---------- CP SETUP ---------- //
 #pragma GCC optimize("O3,unroll-loops")
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,lzcnt,abm,bmi,bmi2,mmx,avx,avx2,fma")
 
@@ -119,6 +120,7 @@ inline void string_array_input(vector<string> &v) {
         getline(cin, v[i]);
 }
 
+//*/*-------------- SOLUTION --------------*/*//
 // !! xxxxxxxx !! START FROM HERE !! xxxxxxxx !!
 /*
  * @lc app=leetcode id=7 lang=cpp
@@ -130,19 +132,11 @@ inline void string_array_input(vector<string> &v) {
 class Solution {
    public:
     int reverse(int x) {
-        int res = 0;
-
-        while (x) {
-            if (res > INT_MAX / 10 || res < INT_MIN / 10) return 0;
-            res = res * 10 + x % 10;
-            x /= 10;
-        }
-
-        return res;
     }
 };
 // @lc code=end
 
+//*/*-------------- SOLUTIONS --------------*/*//
 // Iterative solution - 1
 // Time complexity: O(log(n))
 // Space complexity: O(1)
@@ -183,6 +177,7 @@ class Solution2 {
         return res;
     }
 };
+//*/*-------------- SOLUTIONS --------------*/*//
 
 inline void solve() {
     int n;
