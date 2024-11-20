@@ -110,15 +110,31 @@ inline void string_input(string &s) {
     getline(cin, s);
 }
 
-inline void array_input(vector<int32_t> &v) {
+inline void vector_input(vector<int32_t> &v) {
     for (int32_t i = 0; i < static_cast<int32_t>(v.size()); i++)
         cin >> v[i];
 }
 
-inline void string_array_input(vector<string> &v) {
+inline void string_vector_input(vector<string> &v) {
     for (int32_t i = 0; i < static_cast<int32_t>(v.size()); i++)
         getline(cin, v[i]);
 }
+
+inline void array_input(int32_t arr[], int32_t n) {
+    for (int32_t i = 0; i < n; i++)
+        cin >> arr[i];
+}
+
+inline void string_array_input(string arr[], int32_t n) {
+    for (int32_t i = 0; i < n; i++)
+        getline(cin, arr[i]);
+}
+
+inline void char_array_input(char arr[], int32_t n) {
+    for (int32_t i = 0; i < n; i++)
+        cin >> arr[i];
+}
+
 //*/*-------------- SOLUTION --------------*/*//
 // !! xxxxxxxx !! START FROM HERE !! xxxxxxxx !!
 // @lc code=start
