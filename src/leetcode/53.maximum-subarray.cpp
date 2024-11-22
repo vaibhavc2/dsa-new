@@ -236,7 +236,7 @@ class Solution6 {
         int currentSum = 0;
         int maxSum = INT_MIN;
 
-        for (auto num : nums) {
+        for (auto& num : nums) {
             currentSum = max(num, currentSum + num);
             maxSum = max(maxSum, currentSum);
         }

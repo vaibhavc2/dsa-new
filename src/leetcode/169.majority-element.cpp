@@ -138,127 +138,90 @@ inline void char_array_input(char arr[], int32_t n) {
 //*/*-------------- SOLUTION --------------*/*//
 // !! xxxxxxxx !! START FROM HERE !! xxxxxxxx !!
 /*
- * @lc app=leetcode id=1047 lang=cpp
+ * @lc app=leetcode id=169 lang=cpp
  *
- * [1047] Remove All Adjacent Duplicates In String
+ * [169] Majority Element
  */
 
 // @lc code=start
 class Solution {
    public:
-    string removeDuplicates(string s) {}
+    int majorityElement(vector<int> &nums) {}
 };
 // @lc code=end
 
 //*/*-------------- SOLUTIONS --------------*/*//
 
-// Brute force Optimized approach
-// Time complexity: O(n)
-// Space complexity: O(n)
+// using sorting (Time complexity is inefficient but space complexity is great!)
+// Time: O(nlogn)
+// Space: O(1)
 class Solution1 {
-    inline int checkDuplicates(string &s) {
-        for (int i = 0; i < (int)(size(s)) - 1; ++i) {
-            if (s[i] == s[i + 1]) return i;
-        }
-        return -1;
-    }
-
    public:
-    string removeDuplicates(string s) {
-        if (size(s) < 2) return s;
-
-        int i = checkDuplicates(s);
-        while (i != -1) {
-            do {
-                s.erase(i, 2);
-
-                if (i > 0) --i;
-
-            } while (s[i] == s[i + 1]);
-
-            i = checkDuplicates(s);
-        }
-
-        return s;
+    int majorityElement(vector<int> &nums) {
+        sort(nums.begin(), nums.end());
+        return nums[((int)nums.size()) / 2];
     }
 };
 
-// Stack approach
-// Time complexity: O(n)
-// Space complexity: O(n)
+// using map - hash table (Optimal Time complexity but space complexity is not great!)
+// Time: O(n)
+// Space: O(n)
 class Solution2 {
    public:
-    string removeDuplicates(string s) {
-        stack<char> st;
-        string res;
+    int majorityElement(vector<int> &nums) {
+        int n = (int)size(nums);
+        if (n < 3) return nums[0];
 
-        for (auto &c : s) {
-            if (!st.empty() && st.top() == c) {
-                st.pop();
-            } else {
-                st.push(c);
-            }
+        unordered_map<int, int> mp;
+
+        for (auto &x : nums) {
+            mp[x]++;
+
+            if (mp[x] > n / 2) return x;
         }
 
-        while (!st.empty()) {
-            res.push_back(st.top());
-            st.pop();
-        }
-
-        reverse(res.begin(), res.end());
-
-        return res;
+        return -1;
     }
 };
 
-// Stack approach - Optimized - Use string as a stack
-// Time complexity: O(n)
-// Space complexity: O(n)
+// Boyer-Moore Voting Algorithm (Optimal Time and Space complexity)
+// Time: O(n)
+// Space: O(1)
 class Solution3 {
    public:
-    string removeDuplicates(string s) {
-        string result;
-        for (char &c : s) {
-            if (!result.empty() && result.back() == c) {
-                result.pop_back();
-            } else {
-                result.push_back(c);
-            }
-        }
-        return result;
-    }
-};
+    int majorityElement(vector<int> &nums) {
+        int cnt = 0, res = nums[0];
 
-// Two pointers approach
-// Time complexity: O(n)
-// Space complexity: O(n)
-class Solution4 {
-   public:
-    string removeDuplicates(string s) {
-        int i = 0, n = (int)s.length();
-        for (int j = 0; j < n; ++j, ++i) {
-            s[i] = s[j];  // this helps copying the next chars after duplicates at the beginning of the string
-            if (i > 0 && s[i - 1] == s[i])
-                i -= 2;  // adjacent duplicates found
+        for (auto &x : nums) {
+            if (cnt == 0) res = x;
+            if (res == x)
+                ++cnt;
+            else
+                --cnt;
         }
-        return s.substr(0, i);
+
+        return res;
     }
 };
 
 //*/*-------------- SOLUTIONS --------------*/*//
 
 inline void solve() {
-    string s;
-    cin >> s;
+    int n;
+    input(n);
 
-    // vector<int32_t> v(n);
-    // array_input(v);
+    // string s;
+    // cin >> s;
+    // string_input(s);
 
-    // vector<string> vs(n);
-    // string_array_input(vs);
+    vector<int32_t> v(n);
+    vector_input(v);
+
+    // int32_t arr[10000];
+    // array_input(arr, n);
 
     Solution sol;
-    auto ans = sol.removeDuplicates(s);
+    auto ans = sol.majorityElement(v);
     cout << ans << endl;
 }
 

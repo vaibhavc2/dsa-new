@@ -138,127 +138,105 @@ inline void char_array_input(char arr[], int32_t n) {
 //*/*-------------- SOLUTION --------------*/*//
 // !! xxxxxxxx !! START FROM HERE !! xxxxxxxx !!
 /*
- * @lc app=leetcode id=1047 lang=cpp
+ * @lc app=leetcode id=242 lang=cpp
  *
- * [1047] Remove All Adjacent Duplicates In String
+ * [242] Valid Anagram
  */
 
 // @lc code=start
 class Solution {
    public:
-    string removeDuplicates(string s) {}
+    bool isAnagram(string s, string t) {}
 };
 // @lc code=end
 
 //*/*-------------- SOLUTIONS --------------*/*//
 
-// Brute force Optimized approach
-// Time complexity: O(n)
-// Space complexity: O(n)
+// method 1 - Sorting
+// Time: O(nlogn)
+// Space: O(1)
 class Solution1 {
-    inline int checkDuplicates(string &s) {
-        for (int i = 0; i < (int)(size(s)) - 1; ++i) {
-            if (s[i] == s[i + 1]) return i;
-        }
-        return -1;
-    }
-
    public:
-    string removeDuplicates(string s) {
-        if (size(s) < 2) return s;
+    bool isAnagram(string s, string t) {
+        sort(s.begin(), s.end());
+        sort(t.begin(), t.end());
 
-        int i = checkDuplicates(s);
-        while (i != -1) {
-            do {
-                s.erase(i, 2);
-
-                if (i > 0) --i;
-
-            } while (s[i] == s[i + 1]);
-
-            i = checkDuplicates(s);
-        }
-
-        return s;
+        return s == t;
     }
 };
 
-// Stack approach
-// Time complexity: O(n)
-// Space complexity: O(n)
+// method 2 - 2 Hash Tables using unordered_map
+// Time: O(n)
+// Space: O(1)
 class Solution2 {
    public:
-    string removeDuplicates(string s) {
-        stack<char> st;
-        string res;
+    bool isAnagram(string s, string t) {
+        if (s.length() != t.length()) return false;
 
-        for (auto &c : s) {
-            if (!st.empty() && st.top() == c) {
-                st.pop();
-            } else {
-                st.push(c);
-            }
+        unordered_map<char, int> frqMp1, frqMp2;
+
+        for (auto &ch : s) ++frqMp1[ch];
+        for (auto &ch : t) ++frqMp2[ch];
+
+        int l1 = (int)frqMp1.size();
+        int l2 = (int)frqMp2.size();
+
+        if (l1 != l2) return false;
+
+        for (int i = 97; i < 122; ++i) {
+            if (frqMp1[(char)i] != frqMp2[(char)i]) return false;
         }
 
-        while (!st.empty()) {
-            res.push_back(st.top());
-            st.pop();
-        }
-
-        reverse(res.begin(), res.end());
-
-        return res;
+        return true;
     }
 };
 
-// Stack approach - Optimized - Use string as a stack
-// Time complexity: O(n)
-// Space complexity: O(n)
+// method 3 - 1 Hash Table using unordered_map
+// Time: O(n)
+// Space: O(1)
 class Solution3 {
    public:
-    string removeDuplicates(string s) {
-        string result;
-        for (char &c : s) {
-            if (!result.empty() && result.back() == c) {
-                result.pop_back();
-            } else {
-                result.push_back(c);
-            }
+    bool isAnagram(string s, string t) {
+        unordered_map<char, int> count;
+
+        for (auto &c : s) count[c]++;
+        for (auto &c : t) count[c]--;
+
+        for (auto &x : count) {
+            if (x.second != 0) return false;
         }
-        return result;
+
+        return true;
     }
 };
 
-// Two pointers approach
-// Time complexity: O(n)
-// Space complexity: O(n)
+// method 4 - 1 Hash Table using array - faster than unordered_map - MOST OPTIMAL
+// Time: O(n)
+// Space: O(1)
 class Solution4 {
    public:
-    string removeDuplicates(string s) {
-        int i = 0, n = (int)s.length();
-        for (int j = 0; j < n; ++j, ++i) {
-            s[i] = s[j];  // this helps copying the next chars after duplicates at the beginning of the string
-            if (i > 0 && s[i - 1] == s[i])
-                i -= 2;  // adjacent duplicates found
+    bool isAnagram(string s, string t) {
+        int cnt[26] = {0};
+
+        for (char &c : s) cnt[c - 'a']++;
+        for (char &c : t) cnt[c - 'a']--;
+
+        for (int &val : cnt) {
+            if (val != 0) return false;
         }
-        return s.substr(0, i);
+
+        return true;
     }
 };
 
 //*/*-------------- SOLUTIONS --------------*/*//
 
 inline void solve() {
-    string s;
-    cin >> s;
-
-    // vector<int32_t> v(n);
-    // array_input(v);
-
-    // vector<string> vs(n);
-    // string_array_input(vs);
+    string s, t;
+    cin >> s >> t;
 
     Solution sol;
-    auto ans = sol.removeDuplicates(s);
+    auto ans = sol.isAnagram(s, t);
     cout << ans << endl;
 }
 

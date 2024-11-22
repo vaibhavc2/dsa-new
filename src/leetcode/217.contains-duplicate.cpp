@@ -138,127 +138,94 @@ inline void char_array_input(char arr[], int32_t n) {
 //*/*-------------- SOLUTION --------------*/*//
 // !! xxxxxxxx !! START FROM HERE !! xxxxxxxx !!
 /*
- * @lc app=leetcode id=1047 lang=cpp
+ * @lc app=leetcode id=217 lang=cpp
  *
- * [1047] Remove All Adjacent Duplicates In String
+ * [217] Contains Duplicate
  */
 
 // @lc code=start
 class Solution {
-   public:
-    string removeDuplicates(string s) {}
+public:
+    bool containsDuplicate(vector<int>& nums) {}
 };
 // @lc code=end
 
 //*/*-------------- SOLUTIONS --------------*/*//
 
-// Brute force Optimized approach
-// Time complexity: O(n)
-// Space complexity: O(n)
+// approach 1 - sort the array and check if adjacent elements are same
+// Time: O(nlogn)
+// Space: O(1)
 class Solution1 {
-    inline int checkDuplicates(string &s) {
-        for (int i = 0; i < (int)(size(s)) - 1; ++i) {
-            if (s[i] == s[i + 1]) return i;
+public:
+    bool containsDuplicate(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        int n = nums.size();
+        for (int i = 1; i < n; i++) {
+            if (nums[i] == nums[i - 1])
+                return true;
         }
-        return -1;
-    }
-
-   public:
-    string removeDuplicates(string s) {
-        if (size(s) < 2) return s;
-
-        int i = checkDuplicates(s);
-        while (i != -1) {
-            do {
-                s.erase(i, 2);
-
-                if (i > 0) --i;
-
-            } while (s[i] == s[i + 1]);
-
-            i = checkDuplicates(s);
-        }
-
-        return s;
+        return false;
     }
 };
 
-// Stack approach
-// Time complexity: O(n)
-// Space complexity: O(n)
+// approach 2 - use a set to store unique elements
+// Time: O(n)
+// Space: O(n)
 class Solution2 {
    public:
-    string removeDuplicates(string s) {
-        stack<char> st;
-        string res;
+    bool containsDuplicate(vector<int> &nums) {
+        unordered_set<int> uniqueNums;
 
-        for (auto &c : s) {
-            if (!st.empty() && st.top() == c) {
-                st.pop();
-            } else {
-                st.push(c);
-            }
-        }
+        for (auto& n: nums) uniqueNums.emplace(n);
 
-        while (!st.empty()) {
-            res.push_back(st.top());
-            st.pop();
-        }
-
-        reverse(res.begin(), res.end());
-
-        return res;
+        return nums.size() > uniqueNums.size();
     }
 };
 
-// Stack approach - Optimized - Use string as a stack
-// Time complexity: O(n)
-// Space complexity: O(n)
+// approach 3 - use set to store unique elements - short code
+// Time: O(n)
+// Space: O(n)
 class Solution3 {
-   public:
-    string removeDuplicates(string s) {
-        string result;
-        for (char &c : s) {
-            if (!result.empty() && result.back() == c) {
-                result.pop_back();
-            } else {
-                result.push_back(c);
-            }
-        }
-        return result;
+public:
+    bool containsDuplicate(vector<int>& nums) {
+        return nums.size() > unordered_set<int>(nums.begin(),nums.end()).size();
     }
 };
 
-// Two pointers approach
-// Time complexity: O(n)
-// Space complexity: O(n)
+// approach 4 - use set to store unique elements - MOST OPTIMAL
+// Time: O(n)
+// Space: O(n)
 class Solution4 {
-   public:
-    string removeDuplicates(string s) {
-        int i = 0, n = (int)s.length();
-        for (int j = 0; j < n; ++j, ++i) {
-            s[i] = s[j];  // this helps copying the next chars after duplicates at the beginning of the string
-            if (i > 0 && s[i - 1] == s[i])
-                i -= 2;  // adjacent duplicates found
+public:
+    bool containsDuplicate(vector<int>& nums) {
+        unordered_set<int> seen;
+        for (int num : nums) {
+            if (seen.count(num))
+                return true;
+            seen.insert(num);
         }
-        return s.substr(0, i);
+        return false;
     }
 };
 
 //*/*-------------- SOLUTIONS --------------*/*//
 
 inline void solve() {
-    string s;
-    cin >> s;
+    int n;
+    input(n);
 
-    // vector<int32_t> v(n);
-    // array_input(v);
+    // string s;
+    // cin >> s;
+    // string_input(s);
 
-    // vector<string> vs(n);
-    // string_array_input(vs);
+    vector<int32_t> v(n);
+    vector_input(v);
+
+    // int32_t arr[10000];
+    // array_input(arr, n);
 
     Solution sol;
-    auto ans = sol.removeDuplicates(s);
+    auto ans = sol.containsDuplicate(v);
     cout << ans << endl;
 }
 

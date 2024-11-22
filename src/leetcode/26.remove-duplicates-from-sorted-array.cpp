@@ -138,127 +138,80 @@ inline void char_array_input(char arr[], int32_t n) {
 //*/*-------------- SOLUTION --------------*/*//
 // !! xxxxxxxx !! START FROM HERE !! xxxxxxxx !!
 /*
- * @lc app=leetcode id=1047 lang=cpp
+ * @lc app=leetcode id=26 lang=cpp
  *
- * [1047] Remove All Adjacent Duplicates In String
+ * [26] Remove Duplicates from Sorted Array
  */
 
 // @lc code=start
 class Solution {
    public:
-    string removeDuplicates(string s) {}
+    int removeDuplicates(vector<int> &nums) {}
 };
 // @lc code=end
 
 //*/*-------------- SOLUTIONS --------------*/*//
 
-// Brute force Optimized approach
-// Time complexity: O(n)
-// Space complexity: O(n)
+// approach 1 - using set
+// time complexity - O(nlogn)
+// space complexity - O(n)
 class Solution1 {
-    inline int checkDuplicates(string &s) {
-        for (int i = 0; i < (int)(size(s)) - 1; ++i) {
-            if (s[i] == s[i + 1]) return i;
-        }
-        return -1;
-    }
-
    public:
-    string removeDuplicates(string s) {
-        if (size(s) < 2) return s;
+    int removeDuplicates(vector<int> &nums) {
+        set<int> st;
 
-        int i = checkDuplicates(s);
-        while (i != -1) {
-            do {
-                s.erase(i, 2);
-
-                if (i > 0) --i;
-
-            } while (s[i] == s[i + 1]);
-
-            i = checkDuplicates(s);
+        for (auto it = nums.begin(); it != nums.end(); ++it) {
+            if (!st.empty() && st.find(*it) != st.end()) {
+                *it = 100000;
+            } else
+                st.emplace(*it);
         }
 
-        return s;
+        sort(nums.begin(), nums.end());
+
+        return (int)st.size();
     }
 };
 
-// Stack approach
-// Time complexity: O(n)
-// Space complexity: O(n)
+// 2 pointer approach
+// time complexity - O(n)
+// space complexity - O(1)
 class Solution2 {
    public:
-    string removeDuplicates(string s) {
-        stack<char> st;
-        string res;
-
-        for (auto &c : s) {
-            if (!st.empty() && st.top() == c) {
-                st.pop();
-            } else {
-                st.push(c);
-            }
+    int removeDuplicates(vector<int> &nums) {
+        int n = (int)nums.size();
+        if (n < 2) return n;
+    
+        // two pointer approach - in place array modification
+        int j = 1;
+        // j -> index of next unique element, also the length of the new array
+        // i -> index of current element
+        for (int i = 1; i < n; ++i) {
+            if (nums[i] != nums[i - 1])
+                nums[j++] = nums[i];
         }
 
-        while (!st.empty()) {
-            res.push_back(st.top());
-            st.pop();
-        }
-
-        reverse(res.begin(), res.end());
-
-        return res;
-    }
-};
-
-// Stack approach - Optimized - Use string as a stack
-// Time complexity: O(n)
-// Space complexity: O(n)
-class Solution3 {
-   public:
-    string removeDuplicates(string s) {
-        string result;
-        for (char &c : s) {
-            if (!result.empty() && result.back() == c) {
-                result.pop_back();
-            } else {
-                result.push_back(c);
-            }
-        }
-        return result;
-    }
-};
-
-// Two pointers approach
-// Time complexity: O(n)
-// Space complexity: O(n)
-class Solution4 {
-   public:
-    string removeDuplicates(string s) {
-        int i = 0, n = (int)s.length();
-        for (int j = 0; j < n; ++j, ++i) {
-            s[i] = s[j];  // this helps copying the next chars after duplicates at the beginning of the string
-            if (i > 0 && s[i - 1] == s[i])
-                i -= 2;  // adjacent duplicates found
-        }
-        return s.substr(0, i);
+        return j;
     }
 };
 
 //*/*-------------- SOLUTIONS --------------*/*//
 
 inline void solve() {
-    string s;
-    cin >> s;
+    int n;
+    input(n);
 
-    // vector<int32_t> v(n);
-    // array_input(v);
+    // string s;
+    // string_input(s);
+
+    vector<int32_t> v(n);
+    vector_input(v);
 
     // vector<string> vs(n);
     // string_array_input(vs);
 
     Solution sol;
-    auto ans = sol.removeDuplicates(s);
+    auto ans = sol.removeDuplicates(v);
     cout << ans << endl;
 }
 
