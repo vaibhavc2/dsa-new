@@ -157,13 +157,14 @@ inline void solve() {
     input(n);
 
     // string s;
+    // cin >> s;
     // string_input(s);
 
     // vector<int32_t> v(n);
-    // array_input(v);
+    // vector_input(v);
 
-    // vector<string> vs(n);
-    // string_array_input(vs);
+    // int32_t arr[10000];
+    // array_input(arr, n);
 
     Solution sol;
     auto ans = sol.func(n);
