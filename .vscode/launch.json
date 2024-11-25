@@ -28,10 +28,6 @@
                     "ignoreFailures": true
                 },
                 {
-                    "description": "Test pretty-printing",
-                    "text": "show print pretty"
-                },
-                {
                     "description": "Enable information of registers",
                     "text": "-exec info registers",
                     "ignoreFailures": true

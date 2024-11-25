@@ -112,10 +112,10 @@
         "editor.fontSize": 12,
         "editor.lineHeight": 0,
         "editor.minimap.enabled": false,
-        "editor.lineNumbers": "off",
         "editor.glyphMargin": false,
-        "editor.wordWrap": "on"
+        "editor.wordWrap": "off",
     },
+    "editor.wordWrap": "on",
     "breadcrumbs.enabled": false,
     "task.autoDetect": "off",
     "C_Cpp.default.cppStandard": "c++17"
