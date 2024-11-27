@@ -3,8 +3,10 @@
 
 // ---------- CP SETUP ---------- //
 #ifndef DEBUG
+#ifndef DEBUG
 #pragma GCC optimize("O3,unroll-loops")
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,lzcnt,abm,bmi,bmi2,mmx,avx,avx2,fma")
+#endif
 #endif
 
 #define CP_INCLUDES

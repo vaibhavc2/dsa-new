@@ -1,12 +1,17 @@
 // ---------- CP SETUP ---------- //
+#ifndef DEBUG
 #pragma GCC optimize("O3,unroll-loops")
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,lzcnt,abm,bmi,bmi2,mmx,avx,avx2,fma")
+#endif
 
 #include <bits/stdc++.h>
 using namespace std;
 
 #define endl "\n"
+/* Prefer 'using ll' in leetcode */
+// using ll = long long;
 // #define int long long
+
 #define fastIO()                      \
     ios_base::sync_with_stdio(false); \
     cin.tie(nullptr);                 \
@@ -172,8 +177,10 @@ inline void solve() {
 }
 
 int32_t main() {
+#ifndef DEBUG
     fastIO();
     DOUBLE();
+#endif
 
     int t = 1;
     cin >> t;
