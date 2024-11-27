@@ -23,8 +23,8 @@ bool isArmstrongNumber(int n) {
         n /= 10;
     }
 
-    const int s = digits.size();
-    for (auto d: digits) {
+    const int s = (int)digits.size();
+    for (auto& d : digits) {
         sum += pow(d, s);
     }
 
@@ -78,7 +78,7 @@ vector<int> LCM_GCD(int a, int b) {
         b = a % b;
         a = temp;
     }
-    return {(a * b) / a, a};
+    return {(a * b) / a, a}; // {lcm, gcd};
 }
 
 int main() {
