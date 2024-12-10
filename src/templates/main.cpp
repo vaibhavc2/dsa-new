@@ -187,7 +187,7 @@ inline void print(const T x) {
 }
 
 template <typename T, typename... Args>
-inline void print(const T x, const Args ...args) {
+inline void print(const T x, const Args... args) {
     _print(x);
     cout << endl;
     print(args...);
@@ -202,8 +202,8 @@ template <typename T>
 inline void _input(T &x, InputMethod method = Standard) {
     if constexpr (is_same<T, string>::value) {
         if (method == Line) {
-            cin.ignore(); // ignores a new line ('\n')
-            cin.ignore(); // ignores a new line ('\n')
+            cin.ignore();  // ignores a new line ('\n')
+            cin.ignore();  // ignores a new line ('\n')
             getline(cin, x);
         } else {
             cin >> x;
@@ -370,6 +370,87 @@ inline void input(InputMethod method, Args &...args) {
     (_input(args, method), ...);
 }
 
+template <typename T>
+T parse_token(stringstream &ss, char delimiter = ' ') {
+    string token;
+    if (!getline(ss, token, delimiter)) {
+        throw runtime_error("Failed to parse token");
+    }
+    stringstream value_stream(token);
+    T value;
+    value_stream >> value;
+    if (value_stream.fail()) {
+        throw invalid_argument("Invalid type conversion");
+    }
+    return value;
+}
+
+template <typename T>
+vector<T> parse_array(stringstream &ss, char open_bracket = '[', char close_bracket = ']', char delimiter = ',') {
+    vector<T> result;
+    char ch;
+
+    ss >> ch;
+    if (ch != open_bracket) throw invalid_argument("Invalid array format");
+
+    while (true) {
+        if (ss.peek() == close_bracket) {
+            ss.get();
+            break;
+        }
+        result.push_back(parse_token<T>(ss, delimiter));
+        if (ss.peek() == delimiter) ss.get();
+    }
+
+    return result;
+}
+
+template <typename T>
+vector<vector<T>> parse_nested_array(stringstream &ss, char open_bracket = '[', char close_bracket = ']', char delimiter = ',') {
+    vector<vector<T>> result;
+    char ch;
+
+    ss >> ch;
+    if (ch != open_bracket) throw invalid_argument("Invalid nested array format");
+
+    while (true) {
+        if (ss.peek() == close_bracket) {
+            ss.get();
+            break;
+        }
+        result.push_back(parse_array<T>(ss, open_bracket, close_bracket, delimiter));
+        if (ss.peek() == delimiter) ss.get();
+    }
+
+    return result;
+}
+
+template <typename T>
+void parse_single_input(stringstream &ss, T &var) {
+    if constexpr (is_same_v<T, vector<typename T::value_type>>) {
+        var = parse_array<typename T::value_type>(ss);
+    } else if constexpr (is_same_v<T, vector<vector<typename T::value_type::value_type>>>) {
+        var = parse_nested_array<typename T::value_type::value_type>(ss);
+    } else {
+        ss >> var;
+    }
+}
+
+template <typename T>
+vector<T> parse_space_separated_array(stringstream &ss) {
+    vector<T> result;
+    T value;
+    while (ss >> value) {
+        result.push_back(value);
+    }
+    return result;
+}
+
+template <typename... Args>
+void parse_input(stringstream &ss, Args &...args) {
+    (parse_single_input(ss, args), ...);
+}
+
 // !! xxxxxxxx !! START FROM HERE !! xxxxxxxx !!
 
 //*/*-------------- SOLUTION --------------*/*//
@@ -406,6 +487,11 @@ void solve() {
 
     input(Standard, x, v, vv);
     input(Line, s);
+
+    // string line;
+    // getline(cin, line);
+    // stringstream ss(line);
+    // parse_input(ss, x, v, vv, s);
 
     Solution sol;
     auto ans = sol.func(x);
