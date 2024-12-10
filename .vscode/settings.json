@@ -15,7 +15,7 @@
         // "cpp": "cd $dir && g++ -pedantic -std=c++17 -DLOCAL_PROJECT -Wall -Wextra -Wshadow -Wduplicated-cond -Wfloat-equal -Wconversion -Wformat=2 -Wlogical-op -Wduplicated-cond -Wshift-overflow=2 -Wcast-qual -Wcast-align -fsanitize=undefined -fno-sanitize-recover -fsanitize=address $fileName -o a && $dir/a",
         // "cpp": "cd $dir && g++ -pedantic -std=c++17 -O3 -DLOCAL_PROJECT -Wall -Wextra -Wshadow -Wduplicated-cond -Wfloat-equal -Wconversion -Wformat=2 -Wlogical-op -Wduplicated-cond -Wshift-overflow=2 -Wcast-qual -Wcast-align -Wvla -Wformat-signedness -fomit-frame-pointer -fstack-protector-all -fsanitize=undefined,address,float-divide-by-zero,float-cast-overflow -fno-sanitize-recover=all $fileName -o a && $dir/a",
         // "cpp": "cd $dir && g++ -pedantic -std=c++17 -O3 -DLOCAL_PROJECT -I/home/node/wsl-code/precompiled -include stdc++.h -include assoc_container.hpp -include tree_policy.hpp -Wall -Wextra -Wshadow -Wduplicated-cond -Wfloat-equal -Wconversion -Wformat=2 -Wlogical-op -Wduplicated-cond -Wshift-overflow=2 -Wcast-qual -Wcast-align -Wvla -Wformat-signedness -fomit-frame-pointer -fstack-protector-all -fsanitize=undefined,address,float-divide-by-zero,float-cast-overflow -fno-sanitize-recover=all $fileName -o a && $dir/a",
-        "cpp": "CompileAndRunCPP $dir $fileName",
+        "cpp": "CompileAndRunCPP $dir $fileName"
     },
     "files.associations": {
         "functional": "cpp",
@@ -108,16 +108,71 @@
     "C_Cpp.dimInactiveRegions": false,
     "tabout.disableByDefault": false,
     "cSpell.enabled": false,
+    "[cpp]": {
+        "editor.formatOnPaste": false,
+        "editor.formatOnSave": false,
+        "editor.formatOnType": false,
+        "explicitFolding.rules": [
+            {
+                "begin": "// ---------- CP SETUP ---------- //",
+                "end": "//*/*-------------- SOLUTION --------------*/*//",
+                "autoFold": true
+            },
+            {
+                "begin": "//*/*-------------- SOLUTIONS --------------*/*//",
+                "end": "//*/*-------------- SOLUTIONS --------------*/*//",
+                "autoFold": true
+            },
+            {
+                "begin": "//*/*-------------- BigInt Implementation --------------*/*//",
+                "end": "//*/*------------------- BigInt OVER -------------------*/*//",
+                "autoFold": true
+            },
+            {
+                "begin": "// ************* IO Implementations *************",
+                "end": "// !! xxxxxxxx !! START FROM HERE !! xxxxxxxx !!",
+                "autoFold": true
+            },
+            {
+                "begin": "int32_t main() {",
+                "end": "// ********************** END *********************",
+                "autoFold": true
+            },
+            {
+                "begin": "int main() {",
+                "end": "// ********************** END *********************",
+                "autoFold": true
+            },
+            {
+                "beginRegex": "#if(?:n?def)?",
+                "middleRegex": "#el(?:se|if)",
+                "endRegex": "#endif",
+                "autoFold": false
+            }
+        ],
+        "editor.defaultFormatter": "ms-vscode.cpptools"
+    },
     "[plaintext]": {
         "editor.fontSize": 12,
+        "editor.fontFamily": "'SF Mono', monospace",
         "editor.lineHeight": 0,
         "editor.minimap.enabled": false,
         "editor.glyphMargin": false,
-        "editor.wordWrap": "off",
+        "editor.wordWrap": "off"
     },
+    "[Log]": {
+        "editor.fontSize": 12,
+        "editor.fontFamily": "'SF Mono', monospace",
+        "editor.lineHeight": 0,
+        "editor.minimap.enabled": false,
+        "editor.glyphMargin": false,
+        "editor.wordWrap": "on"
+    },
+    "workbench.colorTheme": "Default Dark Modern",
     "editor.wordWrap": "on",
     "breadcrumbs.enabled": false,
     "task.autoDetect": "off",
     "C_Cpp.default.cppStandard": "c++17"
+    // "problems.autoReveal": true
     // "C_Cpp.default.intelliSenseMode": "gcc-x64",
 }

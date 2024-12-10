@@ -51,6 +51,7 @@
                     "reveal": "never",
                     "clear": true
                 },
+                "dependsOn": "Clear Output File",
                 "detail": "Custom Build Task"
             }
         },
@@ -66,11 +67,10 @@
                 "isDefault": true
             },
             "linux": {
-                "command": "/usr/bin/g++ -fdiagnostics-color=always -g -pedantic -std=c++17 -DDEBUG -DLOCAL_PROJECT -O0 -fno-omit-frame-pointer -Wall -Wvla -Wextra -Wshadow -Wduplicated-cond -Wfloat-equal -Wconversion -Wformat=2 -Wlogical-op -Wduplicated-cond -Wshift-overflow=2 -Wcast-qual -Wcast-align -Wformat-signedness -fstack-protector-all -fsanitize=undefined,address,float-divide-by-zero,float-cast-overflow -fno-sanitize-recover=all ${file} -o ${fileDirname}/a && ${fileDirname}/a < ${workspaceFolder}/input.txt > ${workspaceFolder}/output.txt",
+                "command": "echo -n > ${workspaceFolder}/output.txt && echo -n > ${workspaceFolder}/errors.log && bash -c '{ /usr/bin/g++ -fdiagnostics-color=always -g -pedantic -std=c++17 -DDEBUG -DLOCAL_PROJECT -O0 -fno-omit-frame-pointer -Wall -Wvla -Wextra -Wshadow -Wduplicated-cond -Wfloat-equal -Wconversion -Wformat=2 -Wlogical-op -Wduplicated-cond -Wshift-overflow=2 -Wcast-qual -Wcast-align -Wformat-signedness -fstack-protector-all -fsanitize=undefined,address,float-divide-by-zero,float-cast-overflow -fno-sanitize-recover=all ${file} -o a; } && ./a < ${workspaceFolder}/input.txt 1> ${workspaceFolder}/output.txt 2> ${workspaceFolder}/errors.log'",
                 "options": {
                     "cwd": "${fileDirname}"
                 },
-                "problemMatcher": ["$gcc"],
                 "presentation": {
                     "reveal": "never",
                     "clear": true
