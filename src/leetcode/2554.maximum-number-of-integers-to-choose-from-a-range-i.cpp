@@ -8,7 +8,10 @@
 using namespace std;
 
 #define endl "\n"
+/* Prefer 'using ll' in leetcode */
+// using ll = long long;
 // #define int long long
+
 #define fastIO()                      \
     ios_base::sync_with_stdio(false); \
     cin.tie(nullptr);                 \
@@ -140,80 +143,70 @@ inline void char_array_input(char arr[], int32_t n) {
 //*/*-------------- SOLUTION --------------*/*//
 // !! xxxxxxxx !! START FROM HERE !! xxxxxxxx !!
 /*
- * @lc app=leetcode id=26 lang=cpp
+ * @lc app=leetcode id=2554 lang=cpp
  *
- * [26] Remove Duplicates from Sorted Array
+ * [2554] Maximum Number of Integers to Choose From a Range I
  */
 
 // @lc code=start
 class Solution {
    public:
-    int removeDuplicates(vector<int> &nums) {}
+    int maxCount(vector<int> &banned, int n, int maxSum) {}
 };
 // @lc code=end
 
 //*/*-------------- SOLUTIONS --------------*/*//
 
-// approach 1 - using set
-// time complexity - O(nlogn)
-// space complexity - O(n)
 class Solution1 {
    public:
-    int removeDuplicates(vector<int> &nums) {
-        set<int> st;
+    int maxCount(vector<int> &banned, int n, int maxSum) {
+        int sum = 0, res = 0;
+        auto it1 = banned.begin(), it2 = banned.end();
+        sort(it1, it2);
 
-        for (auto it = nums.begin(); it != nums.end(); ++it) {
-            if (!st.empty() && st.find(*it) != st.end()) {
-                *it = 100000;
-            } else
-                st.emplace(*it);
+        for (int i = 1; i <= n; i++) {
+            if (i + sum > maxSum) break;
+
+            if (binary_search(it1, it2, i)) continue;
+
+            ++res, sum += i;
         }
 
-        sort(nums.begin(), nums.end());
-
-        return (int)st.size();
+        return res;
     }
 };
 
-// 2 pointer approach
-// time complexity - O(n)
-// space complexity - O(1)
 class Solution2 {
    public:
-    int removeDuplicates(vector<int> &nums) {
-        int n = (int)nums.size();
-        if (n < 2) return n;
-    
-        // two pointer approach - in place array modification
-        int j = 1;
-        // j -> index of next unique element, also the length of the new array
-        // i -> index of current element
-        for (int i = 1; i < n; ++i) {
-            if (nums[i] != nums[i - 1])
-                nums[j++] = nums[i];
+    int maxCount(vector<int> &banned, int n, int maxSum) {
+        int sum = 0, res = 0;
+        int arr[10001] = {0};
+
+        for (auto &x : banned) arr[x] = 1;
+
+        for (int i = 1; i <= n; i++) {
+            if (i + sum > maxSum) break;
+
+            if (arr[i]) continue;
+
+            ++res, sum += i;
         }
 
-        return j;
+        return res;
     }
 };
 
 //*/*-------------- SOLUTIONS --------------*/*//
 
 inline void solve() {
-    int n;
-    input(n);
-
-    // string s;
-    // string_input(s);
-
-    vector<int32_t> v(n);
+    int x, n, m;
+    cin >> x;
+    vector<int32_t> v(x);
     vector_input(v);
-
-    // vector<string> vs(n);
-    // string_array_input(vs);
+    cin >> n >> m;
 
     Solution sol;
-    auto ans = sol.removeDuplicates(v);
+    auto ans = sol.maxCount(v, n, m);
     cout << ans << endl;
 }
 

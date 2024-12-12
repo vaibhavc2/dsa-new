@@ -8,7 +8,10 @@
 using namespace std;
 
 #define endl "\n"
+/* Prefer 'using ll' in leetcode */
+// using ll = long long;
 // #define int long long
+
 #define fastIO()                      \
     ios_base::sync_with_stdio(false); \
     cin.tie(nullptr);                 \
@@ -140,80 +143,62 @@ inline void char_array_input(char arr[], int32_t n) {
 //*/*-------------- SOLUTION --------------*/*//
 // !! xxxxxxxx !! START FROM HERE !! xxxxxxxx !!
 /*
- * @lc app=leetcode id=26 lang=cpp
+ * @lc app=leetcode id=2825 lang=cpp
  *
- * [26] Remove Duplicates from Sorted Array
+ * [2825] Make String a Subsequence Using Cyclic Increments
  */
 
 // @lc code=start
 class Solution {
    public:
-    int removeDuplicates(vector<int> &nums) {}
+    bool canMakeSubsequence(string s, string t) {
+    }
 };
 // @lc code=end
 
 //*/*-------------- SOLUTIONS --------------*/*//
 
-// approach 1 - using set
-// time complexity - O(nlogn)
-// space complexity - O(n)
 class Solution1 {
-   public:
-    int removeDuplicates(vector<int> &nums) {
-        set<int> st;
+   private:
+    inline char nxtChar(char &c) {
+        return c == 'z' ? 'a' : ++c;
+    }
 
-        for (auto it = nums.begin(); it != nums.end(); ++it) {
-            if (!st.empty() && st.find(*it) != st.end()) {
-                *it = 100000;
-            } else
-                st.emplace(*it);
+   public:
+    bool canMakeSubsequence(string s, string t) {
+        int i, j, m, n;
+        m = (int)s.size();
+        n = (int)t.size();
+
+        for (i = j = 0; i < m && j < n; i++) {
+            if (s[i] == t[j] || nxtChar(s[i]) == t[j]) j++;
         }
 
-        sort(nums.begin(), nums.end());
-
-        return (int)st.size();
+        return j == n;
     }
 };
 
-// 2 pointer approach
-// time complexity - O(n)
-// space complexity - O(1)
 class Solution2 {
    public:
-    int removeDuplicates(vector<int> &nums) {
-        int n = (int)nums.size();
-        if (n < 2) return n;
-    
-        // two pointer approach - in place array modification
-        int j = 1;
-        // j -> index of next unique element, also the length of the new array
-        // i -> index of current element
-        for (int i = 1; i < n; ++i) {
-            if (nums[i] != nums[i - 1])
-                nums[j++] = nums[i];
+    bool canMakeSubsequence(string s, string t) {
+        int i = 0, n = (int)t.length();
+
+        for (char &currChar : s) {
+            if (i < n && (t[i] - currChar + 26) % 26 <= 1) i++;
         }
 
-        return j;
+        return i == n;
     }
 };
 
 //*/*-------------- SOLUTIONS --------------*/*//
 
 inline void solve() {
-    int n;
-    input(n);
-
-    // string s;
-    // string_input(s);
-
-    vector<int32_t> v(n);
-    vector_input(v);
-
-    // vector<string> vs(n);
-    // string_array_input(vs);
+    string s, t;
+    cin >> s >> t;
 
     Solution sol;
-    auto ans = sol.removeDuplicates(v);
+    auto ans = sol.canMakeSubsequence(s, t);
     cout << ans << endl;
 }
 

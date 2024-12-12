@@ -140,60 +140,60 @@ inline void char_array_input(char arr[], int32_t n) {
 //*/*-------------- SOLUTION --------------*/*//
 // !! xxxxxxxx !! START FROM HERE !! xxxxxxxx !!
 /*
- * @lc app=leetcode id=26 lang=cpp
+ * @lc app=leetcode id=75 lang=cpp
  *
- * [26] Remove Duplicates from Sorted Array
+ * [75] Sort Colors
  */
 
 // @lc code=start
 class Solution {
    public:
-    int removeDuplicates(vector<int> &nums) {}
+    void sortColors(vector<int> &nums) {}
 };
 // @lc code=end
 
 //*/*-------------- SOLUTIONS --------------*/*//
 
-// approach 1 - using set
-// time complexity - O(nlogn)
-// space complexity - O(n)
+// approach 1 - Counting Sort
+// Time - O(n), Space - O(1)
 class Solution1 {
    public:
-    int removeDuplicates(vector<int> &nums) {
-        set<int> st;
-
-        for (auto it = nums.begin(); it != nums.end(); ++it) {
-            if (!st.empty() && st.find(*it) != st.end()) {
-                *it = 100000;
-            } else
-                st.emplace(*it);
+    void sortColors(vector<int> &nums) {
+        // counting sort
+        int count[3] = {0};
+        for (int i = 0; i < (int)nums.size(); i++) {
+            count[nums[i]]++;
         }
 
-        sort(nums.begin(), nums.end());
-
-        return (int)st.size();
+        int index = 0;
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < count[i]; j++) {
+                nums[index++] = i;
+            }
+        }
     }
 };
 
-// 2 pointer approach
-// time complexity - O(n)
-// space complexity - O(1)
+// approach 2 - Dutch National Flag Algorithm - MOST OPTIMAL
+// Time - O(n), Space - O(1)
 class Solution2 {
    public:
-    int removeDuplicates(vector<int> &nums) {
+    void sortColors(vector<int> &nums) {
         int n = (int)nums.size();
-        if (n < 2) return n;
-    
-        // two pointer approach - in place array modification
-        int j = 1;
-        // j -> index of next unique element, also the length of the new array
-        // i -> index of current element
-        for (int i = 1; i < n; ++i) {
-            if (nums[i] != nums[i - 1])
-                nums[j++] = nums[i];
-        }
+        int low = 0, mid = 0, high = n - 1;
 
-        return j;
+        while (mid <= high) {
+            if (nums[mid] == 0) {
+                swap(nums[low], nums[mid]);
+                low++;
+                mid++;
+            } else if (nums[mid] == 1) {
+                mid++;
+            } else {
+                swap(nums[mid], nums[high]);
+                high--;
+            }
+        }
     }
 };
 
@@ -203,18 +203,12 @@ inline void solve() {
     int n;
     input(n);
 
-    // string s;
-    // string_input(s);
-
     vector<int32_t> v(n);
     vector_input(v);
 
-    // vector<string> vs(n);
-    // string_array_input(vs);
-
     Solution sol;
-    auto ans = sol.removeDuplicates(v);
-    cout << ans << endl;
+    sol.sortColors(v);
+    _print(v);
 }
 
 int32_t main() {

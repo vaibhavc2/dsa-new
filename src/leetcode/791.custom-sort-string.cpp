@@ -8,7 +8,10 @@
 using namespace std;
 
 #define endl "\n"
+/* Prefer 'using ll' in leetcode */
+// using ll = long long;
 // #define int long long
+
 #define fastIO()                      \
     ios_base::sync_with_stdio(false); \
     cin.tie(nullptr);                 \
@@ -140,80 +143,91 @@ inline void char_array_input(char arr[], int32_t n) {
 //*/*-------------- SOLUTION --------------*/*//
 // !! xxxxxxxx !! START FROM HERE !! xxxxxxxx !!
 /*
- * @lc app=leetcode id=26 lang=cpp
+ * @lc app=leetcode id=791 lang=cpp
  *
- * [26] Remove Duplicates from Sorted Array
+ * [791] Custom Sort String
  */
 
 // @lc code=start
 class Solution {
    public:
-    int removeDuplicates(vector<int> &nums) {}
+    string customSortString(string order, string s) {}
 };
 // @lc code=end
 
 //*/*-------------- SOLUTIONS --------------*/*//
 
-// approach 1 - using set
-// time complexity - O(nlogn)
-// space complexity - O(n)
+// approach 1 - Custom sort() using comparator
+// Time - O(nlogn), Space - O(n)
 class Solution1 {
    public:
-    int removeDuplicates(vector<int> &nums) {
-        set<int> st;
-
-        for (auto it = nums.begin(); it != nums.end(); ++it) {
-            if (!st.empty() && st.find(*it) != st.end()) {
-                *it = 100000;
-            } else
-                st.emplace(*it);
+    string customSortString(string order, string s) {
+        // Create a mapping of characters in 'order' to their positions
+        unordered_map<char, int> order_map;
+        for (int i = 0; i < (int)order.size(); ++i) {
+            order_map[order[i]] = i;
         }
 
-        sort(nums.begin(), nums.end());
+        // Custom comparator function
+        auto comparator = [&order_map](char a, char b) {
+            // If both characters are in 'order', compare their positions
+            if (order_map.find(a) != order_map.end() && order_map.find(b) != order_map.end()) {
+                return order_map[a] < order_map[b];
+            }
+            // If only 'a' is in 'order', it should come before 'b'
+            if (order_map.find(a) != order_map.end()) {
+                return true;
+            }
+            // If only 'b' is in 'order', it should come before 'a'
+            if (order_map.find(b) != order_map.end()) {
+                return false;
+            }
+            // If neither 'a' nor 'b' is in 'order', maintain their relative order
+            return a < b;
+        };
 
-        return (int)st.size();
+        // Sort the string 's' using the custom comparator
+        sort(s.begin(), s.end(), comparator);
+
+        return s;
     }
 };
 
-// 2 pointer approach
-// time complexity - O(n)
-// space complexity - O(1)
+// approach 2 - Using frequency map
+// Time - O(n), Space - O(n)
 class Solution2 {
    public:
-    int removeDuplicates(vector<int> &nums) {
-        int n = (int)nums.size();
-        if (n < 2) return n;
-    
-        // two pointer approach - in place array modification
-        int j = 1;
-        // j -> index of next unique element, also the length of the new array
-        // i -> index of current element
-        for (int i = 1; i < n; ++i) {
-            if (nums[i] != nums[i - 1])
-                nums[j++] = nums[i];
+    string customSortString(string order, string s) {
+        unordered_map<char, int> frqMap;
+
+        for (auto &c : s) frqMap[c]++;
+
+        string ans = "";
+        for (auto &c : order) {
+            while (frqMap[c] > 0) {
+                ans.push_back(c);
+                frqMap[c]--;
+            }
         }
 
-        return j;
+        for (auto &[c, frq] : frqMap) {
+            while (frq > 0) {
+                ans.push_back(c), --frq;
+            }
+        }
+
+        return ans;
     }
 };
 
 //*/*-------------- SOLUTIONS --------------*/*//
 
 inline void solve() {
-    int n;
-    input(n);
-
-    // string s;
-    // string_input(s);
-
-    vector<int32_t> v(n);
-    vector_input(v);
-
-    // vector<string> vs(n);
-    // string_array_input(vs);
+    string s, t;
+    cin >> s >> t;
 
     Solution sol;
-    auto ans = sol.removeDuplicates(v);
+    auto ans = sol.customSortString(s, t);
     cout << ans << endl;
 }
 

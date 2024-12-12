@@ -140,80 +140,96 @@ inline void char_array_input(char arr[], int32_t n) {
 //*/*-------------- SOLUTION --------------*/*//
 // !! xxxxxxxx !! START FROM HERE !! xxxxxxxx !!
 /*
- * @lc app=leetcode id=26 lang=cpp
+ * @lc app=leetcode id=1455 lang=cpp
  *
- * [26] Remove Duplicates from Sorted Array
+ * [1455] Check If a Word Occurs As a Prefix of Any Word in a Sentence
  */
 
 // @lc code=start
 class Solution {
    public:
-    int removeDuplicates(vector<int> &nums) {}
+    int isPrefixOfWord(string s, string w) {}
 };
 // @lc code=end
 
 //*/*-------------- SOLUTIONS --------------*/*//
 
-// approach 1 - using set
-// time complexity - O(nlogn)
-// space complexity - O(n)
+// approach 1 - Two Pointers in a Brute Force way
+// Time - O(n), Space - O(1)
 class Solution1 {
    public:
-    int removeDuplicates(vector<int> &nums) {
-        set<int> st;
+    int isPrefixOfWord(string sentence, string searchWord) {
+        int m = (int)searchWord.length();
+        int n = (int)sentence.length();
+        int i = 0, wordCnt = 1;
+        bool found = false;
 
-        for (auto it = nums.begin(); it != nums.end(); ++it) {
-            if (!st.empty() && st.find(*it) != st.end()) {
-                *it = 100000;
-            } else
-                st.emplace(*it);
+        while (i < n) {
+            int preIdx = 0;
+            bool prefixFinding = true;
+            for (; i < n && sentence[i] != ' '; i++) {
+                if (preIdx < m) {
+                    if (prefixFinding) {
+                        if (sentence[i] != searchWord[preIdx])
+                            prefixFinding = false;
+                        else {
+                            preIdx++;
+                            if (preIdx >= m) {
+                                found = true;
+                                break;
+                            }
+                        }
+                    }
+                } else {
+                    found = true;
+                    break;
+                };
+            }
+
+            if (found) break;
+
+            if (sentence[i] == ' ') {
+                wordCnt++;
+                i++;
+            }
         }
 
-        sort(nums.begin(), nums.end());
-
-        return (int)st.size();
+        return found ? wordCnt : -1;
     }
 };
 
-// 2 pointer approach
-// time complexity - O(n)
-// space complexity - O(1)
+// approach 2 - Two Pointers in a more optimized way
+// Time - O(n), Space - O(1)
 class Solution2 {
    public:
-    int removeDuplicates(vector<int> &nums) {
-        int n = (int)nums.size();
-        if (n < 2) return n;
-    
-        // two pointer approach - in place array modification
-        int j = 1;
-        // j -> index of next unique element, also the length of the new array
-        // i -> index of current element
-        for (int i = 1; i < n; ++i) {
-            if (nums[i] != nums[i - 1])
-                nums[j++] = nums[i];
+    int isPrefixOfWord(string s, string w) {
+        int j = 0, curWord = 1; // j is the index of the searchWord
+
+        for (int i = 0; i < (int)s.size(); ++i) {
+            if (j != -1 && s[i] == w[j]) // if the current character matches the character in searchWord, and j is not -1 (i.e. we are searching), then increment j to search for the next character
+                ++j;
+            else if (s[i] == ' ')
+                j = 0, ++curWord; // if we find a space, we reset j to 0 and increment the word count
+            else
+                j = -1; // -1 means we are not searching in this word, so we wait till we find a space and then reset j to 0 to start the search again!
+
+            // if j reaches the end of the searchWord, then return the current word count - we have found the searchWord as a prefix of this word in the given sentence
+            if (j == (int)w.size()) return curWord;
         }
 
-        return j;
+        return -1;
     }
 };
 
 //*/*-------------- SOLUTIONS --------------*/*//
 
 inline void solve() {
-    int n;
-    input(n);
-
-    // string s;
-    // string_input(s);
-
-    vector<int32_t> v(n);
-    vector_input(v);
-
-    // vector<string> vs(n);
-    // string_array_input(vs);
+    string s, t;
+    string_input(s);
+    cin >> t;
 
     Solution sol;
-    auto ans = sol.removeDuplicates(v);
+    auto ans = sol.isPrefixOfWord(s, t);
     cout << ans << endl;
 }
 

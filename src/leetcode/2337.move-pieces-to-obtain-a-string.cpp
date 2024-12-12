@@ -8,7 +8,10 @@
 using namespace std;
 
 #define endl "\n"
+/* Prefer 'using ll' in leetcode */
+// using ll = long long;
 // #define int long long
+
 #define fastIO()                      \
     ios_base::sync_with_stdio(false); \
     cin.tie(nullptr);                 \
@@ -140,80 +143,84 @@ inline void char_array_input(char arr[], int32_t n) {
 //*/*-------------- SOLUTION --------------*/*//
 // !! xxxxxxxx !! START FROM HERE !! xxxxxxxx !!
 /*
- * @lc app=leetcode id=26 lang=cpp
+ * @lc app=leetcode id=2337 lang=cpp
  *
- * [26] Remove Duplicates from Sorted Array
+ * [2337] Move Pieces to Obtain a String
  */
 
 // @lc code=start
 class Solution {
    public:
-    int removeDuplicates(vector<int> &nums) {}
+    bool canChange(string &s, string &t) {}
 };
 // @lc code=end
 
 //*/*-------------- SOLUTIONS --------------*/*//
 
-// approach 1 - using set
-// time complexity - O(nlogn)
-// space complexity - O(n)
 class Solution1 {
    public:
-    int removeDuplicates(vector<int> &nums) {
-        set<int> st;
+    bool canChange(string s, string t) {
+        int i, j, n = (int)s.size();
+        int charCnt1, charCnt2;
+        charCnt1 = charCnt2 = 0;
+        const pair<char, char> p = {'L', 'R'};
 
-        for (auto it = nums.begin(); it != nums.end(); ++it) {
-            if (!st.empty() && st.find(*it) != st.end()) {
-                *it = 100000;
-            } else
-                st.emplace(*it);
+        for (i = j = 0; i < n && j < n; ++i, ++j) {
+            while (s[i] == '_') ++i;
+            while (t[j] == '_') ++j;
+
+            if (s[i] != t[j]) return false;
+
+            if (s[i] == p.first) {
+                if (i < j) return false;
+            } else if (s[i] == p.second) {
+                if (i > j) return false;
+            }
+
+            ++charCnt1, ++charCnt2;
         }
 
-        sort(nums.begin(), nums.end());
+        while (i < n) {
+            if (s[i++] != '_') ++charCnt1;
+        }
 
-        return (int)st.size();
+        while (j < n) {
+            if (t[j++] != '_') ++charCnt2;
+        }
+
+        if (charCnt1 != charCnt2) return false;
+
+        return true;
     }
 };
 
-// 2 pointer approach
-// time complexity - O(n)
-// space complexity - O(1)
 class Solution2 {
    public:
-    int removeDuplicates(vector<int> &nums) {
-        int n = (int)nums.size();
-        if (n < 2) return n;
-    
-        // two pointer approach - in place array modification
-        int j = 1;
-        // j -> index of next unique element, also the length of the new array
-        // i -> index of current element
-        for (int i = 1; i < n; ++i) {
-            if (nums[i] != nums[i - 1])
-                nums[j++] = nums[i];
+    bool canChange(string &s, string &t) {
+        int i, j, n = (int)s.size();
+
+        for (i = j = 0; i < n || j < n; ++i, ++j) {
+            while (i < n && s[i] == '_') ++i;
+            while (j < n && t[j] == '_') ++j;
+
+            // this code works because of the specific behaviour of c++ strings
+            // when i == n then, s[i] = '\0' or null character! (same for j and t)
+
+            if (s[i] != t[j] || (s[i] == 'L' && i < j) || (s[i] == 'R' && i > j)) return 0;
         }
 
-        return j;
+        return 1;
     }
 };
 
 //*/*-------------- SOLUTIONS --------------*/*//
 
 inline void solve() {
-    int n;
-    input(n);
-
-    // string s;
-    // string_input(s);
-
-    vector<int32_t> v(n);
-    vector_input(v);
-
-    // vector<string> vs(n);
-    // string_array_input(vs);
+    string s, t;
+    cin >> s >> t;
 
     Solution sol;
-    auto ans = sol.removeDuplicates(v);
+    auto ans = sol.canChange(s, t);
     cout << ans << endl;
 }
 

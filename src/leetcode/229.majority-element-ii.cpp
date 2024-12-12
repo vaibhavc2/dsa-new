@@ -140,60 +140,99 @@ inline void char_array_input(char arr[], int32_t n) {
 //*/*-------------- SOLUTION --------------*/*//
 // !! xxxxxxxx !! START FROM HERE !! xxxxxxxx !!
 /*
- * @lc app=leetcode id=26 lang=cpp
+ * @lc app=leetcode id=229 lang=cpp
  *
- * [26] Remove Duplicates from Sorted Array
+ * [229] Majority Element II
  */
 
 // @lc code=start
 class Solution {
    public:
-    int removeDuplicates(vector<int> &nums) {}
+    vector<int> majorityElement(vector<int> &nums) {
+    }
 };
 // @lc code=end
 
 //*/*-------------- SOLUTIONS --------------*/*//
 
-// approach 1 - using set
-// time complexity - O(nlogn)
-// space complexity - O(n)
+// Method - 1 - Using Hash Map
+// Time - O(n), Space - O(n)
 class Solution1 {
    public:
-    int removeDuplicates(vector<int> &nums) {
-        set<int> st;
+    vector<int> majorityElement(vector<int> &nums) {
+        int n = (int)nums.size();
+        vector<int> res;
+        unordered_map<int, int> mp, checked;
 
-        for (auto it = nums.begin(); it != nums.end(); ++it) {
-            if (!st.empty() && st.find(*it) != st.end()) {
-                *it = 100000;
-            } else
-                st.emplace(*it);
+        for (auto &x : nums) {
+            mp[x]++;
+            if ((mp[x] > (n / 3)) && !checked[x]) {
+                res.emplace_back(x);
+                checked[x] = 1;
+            }
         }
 
-        sort(nums.begin(), nums.end());
-
-        return (int)st.size();
+        return res;
     }
 };
 
-// 2 pointer approach
-// time complexity - O(n)
-// space complexity - O(1)
+// Method - 2 - Boyer-Moore Voting Algorithm
+// Time - O(n), Space - O(1)
+// MAIN OBSERVATION - There can only be at most 2 different elements that can occur more than n / 3 times!
 class Solution2 {
    public:
-    int removeDuplicates(vector<int> &nums) {
+    vector<int> majorityElement(vector<int> &nums) {
         int n = (int)nums.size();
-        if (n < 2) return n;
-    
-        // two pointer approach - in place array modification
-        int j = 1;
-        // j -> index of next unique element, also the length of the new array
-        // i -> index of current element
-        for (int i = 1; i < n; ++i) {
-            if (nums[i] != nums[i - 1])
-                nums[j++] = nums[i];
+        int count1 = 0, count2 = 0;          // Counters for the potential majority elements
+        int candidate1 = 0, candidate2 = 0;  // Potential majority element candidates
+
+        // First pass to find potential majority elements.
+        for (int i = 0; i < n; i++) {
+            // If count1 is 0 and the current number is not equal to candidate2, update candidate1.
+            if (count1 == 0 && nums[i] != candidate2) {
+                count1 = 1;
+                candidate1 = nums[i];
+            }
+            // If count2 is 0 and the current number is not equal to candidate1, update candidate2.
+            else if (count2 == 0 && nums[i] != candidate1) {
+                count2 = 1;
+                candidate2 = nums[i];
+            }
+            // Update counts for candidate1 and candidate2.
+            else if (candidate1 == nums[i]) {
+                count1++;
+            } else if (candidate2 == nums[i]) {
+                count2++;
+            }
+            // If the current number is different from both candidates, decrement their counts.
+            else {
+                count1--;
+                count2--;
+            }
         }
 
-        return j;
+        vector<int> result;
+        int threshold = n / 3;  // Threshold for majority element
+
+        // Second pass to count occurrences of the potential majority elements.
+        count1 = 0, count2 = 0;
+        for (int i = 0; i < n; i++) {
+            if (candidate1 == nums[i]) {
+                count1++;
+            } else if (candidate2 == nums[i]) {
+                count2++;
+            }
+        }
+
+        // Check if the counts of potential majority elements are greater than n/3 and add them to the result.
+        if (count1 > threshold) {
+            result.push_back(candidate1);
+        }
+        if (count2 > threshold) {
+            result.push_back(candidate2);
+        }
+
+        return result;
     }
 };
 
@@ -203,18 +242,15 @@ inline void solve() {
     int n;
     input(n);
 
-    // string s;
-    // string_input(s);
-
     vector<int32_t> v(n);
     vector_input(v);
 
-    // vector<string> vs(n);
-    // string_array_input(vs);
-
     Solution sol;
-    auto ans = sol.removeDuplicates(v);
-    cout << ans << endl;
+    auto ans = sol.majorityElement(v);
+    for (int i = 0; i < (int)ans.size(); i++) {
+        cout << ans[i] << ' ';
+    }
+    cout << '\n';
 }
 
 int32_t main() {

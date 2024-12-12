@@ -140,60 +140,61 @@ inline void char_array_input(char arr[], int32_t n) {
 //*/*-------------- SOLUTION --------------*/*//
 // !! xxxxxxxx !! START FROM HERE !! xxxxxxxx !!
 /*
- * @lc app=leetcode id=26 lang=cpp
+ * @lc app=leetcode id=1346 lang=cpp
  *
- * [26] Remove Duplicates from Sorted Array
+ * [1346] Check If N and Its Double Exist
  */
 
 // @lc code=start
 class Solution {
    public:
-    int removeDuplicates(vector<int> &nums) {}
+    bool checkIfExist(vector<int> &arr) {}
 };
 // @lc code=end
 
 //*/*-------------- SOLUTIONS --------------*/*//
 
-// approach 1 - using set
-// time complexity - O(nlogn)
-// space complexity - O(n)
+// approach 1 - Sort and Binary Search
+// Time - O(nlogn), Space - O(1)
 class Solution1 {
    public:
-    int removeDuplicates(vector<int> &nums) {
-        set<int> st;
+    bool checkIfExist(vector<int> &arr) {
+        sort(arr.begin(), arr.end());
 
-        for (auto it = nums.begin(); it != nums.end(); ++it) {
-            if (!st.empty() && st.find(*it) != st.end()) {
-                *it = 100000;
-            } else
-                st.emplace(*it);
+        for (auto it = arr.begin(); it != arr.end(); it++) {
+            if ((*it) >= 0) {
+                if (binary_search(it + 1, arr.end(), (*it) * 2)) return true;
+            } else {
+                if (it != arr.begin() && binary_search(arr.begin(), it, (*it) * 2)) return true;
+            }
         }
 
-        sort(nums.begin(), nums.end());
-
-        return (int)st.size();
+        return false;
     }
 };
 
-// 2 pointer approach
-// time complexity - O(n)
-// space complexity - O(1)
+// approach 2 - Sort and Two Pointers - Slighly More Optimized
+// Time - O(nlogn), Space - O(1)
 class Solution2 {
    public:
-    int removeDuplicates(vector<int> &nums) {
-        int n = (int)nums.size();
-        if (n < 2) return n;
-    
-        // two pointer approach - in place array modification
-        int j = 1;
-        // j -> index of next unique element, also the length of the new array
-        // i -> index of current element
-        for (int i = 1; i < n; ++i) {
-            if (nums[i] != nums[i - 1])
-                nums[j++] = nums[i];
+    bool checkIfExist(vector<int> &arr) {
+        sort(arr.begin(), arr.end());
+
+        int i = 0, j = 0;
+        const int n = (int)arr.size();
+
+        while (i < n && j < n) {
+            if (arr[i] < 2 * arr[j]) // this also handles the case of positive nums
+                ++i;
+            else if (arr[i] > 2 * arr[j]) // this also handles the case of negative nums
+                ++j;
+            else if (i != j) // arr[i] == 2 * arr[j], this can be if i == j and arr[i] == 0, so this case is taken care
+                return true;
+            else // i == j and arr[i] == 0
+                ++i;
         }
 
-        return j;
+        return false;
     }
 };
 
@@ -203,17 +204,11 @@ inline void solve() {
     int n;
     input(n);
 
-    // string s;
-    // string_input(s);
-
     vector<int32_t> v(n);
     vector_input(v);
 
-    // vector<string> vs(n);
-    // string_array_input(vs);
-
     Solution sol;
-    auto ans = sol.removeDuplicates(v);
+    auto ans = sol.checkIfExist(v);
     cout << ans << endl;
 }
 

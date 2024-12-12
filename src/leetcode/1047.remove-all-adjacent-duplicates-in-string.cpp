@@ -1,6 +1,8 @@
 // ---------- CP SETUP ---------- //
+#ifndef DEBUG
 #pragma GCC optimize("O3,unroll-loops")
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,lzcnt,abm,bmi,bmi2,mmx,avx,avx2,fma")
+#endif
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -263,8 +265,10 @@ inline void solve() {
 }
 
 int32_t main() {
+#ifndef DEBUG
     fastIO();
     DOUBLE();
+#endif
 
     int t = 1;
     cin >> t;

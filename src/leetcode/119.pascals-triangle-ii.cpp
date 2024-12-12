@@ -140,62 +140,36 @@ inline void char_array_input(char arr[], int32_t n) {
 //*/*-------------- SOLUTION --------------*/*//
 // !! xxxxxxxx !! START FROM HERE !! xxxxxxxx !!
 /*
- * @lc app=leetcode id=26 lang=cpp
+ * @lc app=leetcode id=119 lang=cpp
  *
- * [26] Remove Duplicates from Sorted Array
+ * [119] Pascal's Triangle II
  */
 
 // @lc code=start
 class Solution {
    public:
-    int removeDuplicates(vector<int> &nums) {}
+    vector<int> getRow(int idx) {
+        if (idx == 0) return {1};
+        if (idx == 1) return {1, 1};
+        vector<int> prev = {1, 1};
+        vector<int> res;
+
+        for (int i = 2; i <= idx; i++) {
+            vector<int> tmp(i + 1, 1);
+
+            for (int j = 0; j < (int)prev.size() - 1; j++) {
+                tmp[j + 1] = prev[j] + prev[j + 1];
+            }
+
+            res = prev = tmp;
+        }
+
+        return res;
+    }
 };
 // @lc code=end
 
 //*/*-------------- SOLUTIONS --------------*/*//
-
-// approach 1 - using set
-// time complexity - O(nlogn)
-// space complexity - O(n)
-class Solution1 {
-   public:
-    int removeDuplicates(vector<int> &nums) {
-        set<int> st;
-
-        for (auto it = nums.begin(); it != nums.end(); ++it) {
-            if (!st.empty() && st.find(*it) != st.end()) {
-                *it = 100000;
-            } else
-                st.emplace(*it);
-        }
-
-        sort(nums.begin(), nums.end());
-
-        return (int)st.size();
-    }
-};
-
-// 2 pointer approach
-// time complexity - O(n)
-// space complexity - O(1)
-class Solution2 {
-   public:
-    int removeDuplicates(vector<int> &nums) {
-        int n = (int)nums.size();
-        if (n < 2) return n;
-    
-        // two pointer approach - in place array modification
-        int j = 1;
-        // j -> index of next unique element, also the length of the new array
-        // i -> index of current element
-        for (int i = 1; i < n; ++i) {
-            if (nums[i] != nums[i - 1])
-                nums[j++] = nums[i];
-        }
-
-        return j;
-    }
-};
 
 //*/*-------------- SOLUTIONS --------------*/*//
 
@@ -203,18 +177,13 @@ inline void solve() {
     int n;
     input(n);
 
-    // string s;
-    // string_input(s);
-
-    vector<int32_t> v(n);
-    vector_input(v);
-
-    // vector<string> vs(n);
-    // string_array_input(vs);
-
     Solution sol;
-    auto ans = sol.removeDuplicates(v);
-    cout << ans << endl;
+    auto ans = sol.getRow(n);
+
+    for (auto &x : ans) {
+        cout << x << ' ';
+    }
+    cout << '\n';
 }
 
 int32_t main() {

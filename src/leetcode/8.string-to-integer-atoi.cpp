@@ -140,80 +140,120 @@ inline void char_array_input(char arr[], int32_t n) {
 //*/*-------------- SOLUTION --------------*/*//
 // !! xxxxxxxx !! START FROM HERE !! xxxxxxxx !!
 /*
- * @lc app=leetcode id=26 lang=cpp
+ * @lc app=leetcode id=8 lang=cpp
  *
- * [26] Remove Duplicates from Sorted Array
+ * [8] String to Integer (atoi)
  */
 
 // @lc code=start
 class Solution {
    public:
-    int removeDuplicates(vector<int> &nums) {}
+    int myAtoi(string s) {}
 };
 // @lc code=end
 
 //*/*-------------- SOLUTIONS --------------*/*//
 
-// approach 1 - using set
-// time complexity - O(nlogn)
-// space complexity - O(n)
+// solution 1
+// Time Complexity - O(n), Space Complexity - O(1)
 class Solution1 {
    public:
-    int removeDuplicates(vector<int> &nums) {
-        set<int> st;
+    int myAtoi(string s) {
+        int res = 0, currDigit = 0;
+        bool positive = true;
+        bool signChecked = false;
+        bool digitChecked = false;
+        bool numberStarted = false;
 
-        for (auto it = nums.begin(); it != nums.end(); ++it) {
-            if (!st.empty() && st.find(*it) != st.end()) {
-                *it = 100000;
+        unordered_map<char, int> charNumMap;
+        for (int i = 0, j = 48; i < 10; i++, j++)
+            charNumMap[(char)j] = i;
+
+        for (auto &c : s) {
+            if (!numberStarted && !digitChecked && !signChecked && c == ' ') {
+                continue;
+            } else if (!digitChecked && !signChecked && c == '+') {
+                positive = true;
+                signChecked = true;
+            } else if (!digitChecked && !signChecked && c == '-') {
+                positive = false;
+                signChecked = true;
+            } else if (!numberStarted && c == '0') {
+                digitChecked = true;
+            } else if (c >= 48 && c <= 57) {
+                numberStarted = true;
+                digitChecked = true;
+
+                currDigit = charNumMap[c];
+                if (positive) {
+                    if (res > INT_MAX / 10 || (res == INT_MAX / 10 && currDigit > INT_MAX % 10))
+                        return INT_MAX;
+
+                    res = res * 10 + currDigit;
+                } else {
+                    if (res < INT_MIN / 10 || (res == INT_MIN / 10 && currDigit > -(INT_MIN % 10)))
+                        return INT_MIN;
+
+                    res = res * 10 - currDigit;
+                }
+
             } else
-                st.emplace(*it);
+                break;
         }
 
-        sort(nums.begin(), nums.end());
-
-        return (int)st.size();
+        return res;
     }
 };
 
-// 2 pointer approach
-// time complexity - O(n)
-// space complexity - O(1)
+// solution 2 - better optimized
+// Time Complexity - O(n), Space Complexity - O(1)
 class Solution2 {
    public:
-    int removeDuplicates(vector<int> &nums) {
-        int n = (int)nums.size();
-        if (n < 2) return n;
-    
-        // two pointer approach - in place array modification
-        int j = 1;
-        // j -> index of next unique element, also the length of the new array
-        // i -> index of current element
-        for (int i = 1; i < n; ++i) {
-            if (nums[i] != nums[i - 1])
-                nums[j++] = nums[i];
+    int myAtoi(string s) {
+        int i = 0, n = (int)s.length(), sign = 1, result = 0;
+
+        // Step 1: Skip leading whitespace
+        while (i < n && s[i] == ' ') i++;
+
+        // Step 2: Check for optional sign
+        if (i < n && (s[i] == '-' || s[i] == '+')) {
+            sign = (s[i] == '-') ? -1 : 1;
+            i++;
         }
 
-        return j;
+        // Step 3: Convert digits to integer
+        while (i < n && isdigit(s[i])) {
+            int digit = s[i] - (char)'0';
+            // Check for overflow
+            if (result > (INT_MAX - digit) / 10) {
+                return sign == 1 ? INT_MAX : INT_MIN;
+            }
+            result = result * 10 + digit;
+            i++;
+        }
+
+        return sign * result;
     }
 };
 
 //*/*-------------- SOLUTIONS --------------*/*//
 
 inline void solve() {
-    int n;
-    input(n);
+    // int n;
+    // input(n);
 
-    // string s;
-    // string_input(s);
+    string s;
+    // cin >> s;
+    string_input(s);
 
-    vector<int32_t> v(n);
-    vector_input(v);
+    // vector<int32_t> v(n);
+    // vector_input(v);
 
-    // vector<string> vs(n);
-    // string_array_input(vs);
+    // int32_t arr[10000];
+    // array_input(arr, n);
 
     Solution sol;
-    auto ans = sol.removeDuplicates(v);
+    auto ans = sol.myAtoi(s);
     cout << ans << endl;
 }
 

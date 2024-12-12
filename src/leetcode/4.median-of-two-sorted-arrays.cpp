@@ -140,88 +140,112 @@ inline void char_array_input(char arr[], int32_t n) {
 //*/*-------------- SOLUTION --------------*/*//
 // !! xxxxxxxx !! START FROM HERE !! xxxxxxxx !!
 /*
- * @lc app=leetcode id=26 lang=cpp
+ * @lc app=leetcode id=4 lang=cpp
  *
- * [26] Remove Duplicates from Sorted Array
+ * [4] Median of Two Sorted Arrays
  */
 
 // @lc code=start
 class Solution {
-   public:
-    int removeDuplicates(vector<int> &nums) {}
+public:
+    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
+        
+    }
 };
 // @lc code=end
 
 //*/*-------------- SOLUTIONS --------------*/*//
 
-// approach 1 - using set
-// time complexity - O(nlogn)
-// space complexity - O(n)
+// approach 1 - Merge and Sort - NOT OPTIMAL
+// Time - O((m+n)log(m+n)), Space - O(1)
 class Solution1 {
-   public:
-    int removeDuplicates(vector<int> &nums) {
-        set<int> st;
+   private:
+    int i = 0, j = 0, idx = 0;
+    bool first = true, success = false;
+    double med;
+    pair<int, int> medIdx = {-1, -1}, res = {-1, -1};
 
-        for (auto it = nums.begin(); it != nums.end(); ++it) {
-            if (!st.empty() && st.find(*it) != st.end()) {
-                *it = 100000;
-            } else
-                st.emplace(*it);
+    inline void traverse(vector<int> &nums1, vector<int> &nums2, int &m, int &n) {
+        if (first) {
+            if (i >= m && j < n)
+                res.first = nums2[j++];
+            else if (j >= n && i < m)
+                res.first = nums1[i++];
+            else if (i < m && j < n) {
+                if (nums1[i] < nums2[j])
+                    res.first = nums1[i++];
+                else
+                    res.first = nums2[j++];
+            }
+
+            if (idx == medIdx.first) {
+                if (medIdx.second == -1) {
+                    med = static_cast<double>(res.first);
+                    success = true;
+                    return;
+                } else
+                    first = false;
+            }
+        } else {
+            if (i >= m && j < n)
+                res.second = nums2[j++];
+            else if (j >= n && i < m)
+                res.second = nums1[i++];
+            else if (i < m && j < n) {
+                if (nums1[i] < nums2[j])
+                    res.second = nums1[i++];
+                else
+                    res.second = nums2[j++];
+            }
+
+            if (idx == medIdx.second) {
+                med = static_cast<double>(res.first + res.second) / 2;
+                success = true;
+            }
         }
-
-        sort(nums.begin(), nums.end());
-
-        return (int)st.size();
     }
-};
 
-// 2 pointer approach
-// time complexity - O(n)
-// space complexity - O(1)
-class Solution2 {
    public:
-    int removeDuplicates(vector<int> &nums) {
-        int n = (int)nums.size();
-        if (n < 2) return n;
-    
-        // two pointer approach - in place array modification
-        int j = 1;
-        // j -> index of next unique element, also the length of the new array
-        // i -> index of current element
-        for (int i = 1; i < n; ++i) {
-            if (nums[i] != nums[i - 1])
-                nums[j++] = nums[i];
+    double findMedianSortedArrays(vector<int> &nums1, vector<int> &nums2) {
+        int m = (int)nums1.size();
+        int n = (int)nums2.size();
+
+        if ((m + n) % 2 == 0) {
+            medIdx.first = (m + n) / 2 - 1;
+            medIdx.second = (m + n) / 2;
+        } else
+            medIdx.first = (m + n) / 2;
+
+        for (; idx <= (m + n) / 2 && !success; idx++) {
+            traverse(nums1, nums2, m, n);
         }
 
-        return j;
+        return med;
     }
 };
 
 //*/*-------------- SOLUTIONS --------------*/*//
 
 inline void solve() {
-    int n;
-    input(n);
+    int n1, n2;
+    input(n1);
 
-    // string s;
-    // string_input(s);
-
-    vector<int32_t> v(n);
-    vector_input(v);
-
-    // vector<string> vs(n);
-    // string_array_input(vs);
+    vector<int32_t> v1(n1);
+    vector_input(v1);
+    input(n2);
+    vector<int32_t> v2(n2);
+    vector_input(v2);
 
     Solution sol;
-    auto ans = sol.removeDuplicates(v);
+    auto ans = sol.findMedianSortedArrays(v1, v2);
     cout << ans << endl;
 }
 
 int32_t main() {
 #ifndef DEBUG
     fastIO();
-    DOUBLE();
 #endif
+    DOUBLE();
 
     int t = 1;
     cin >> t;

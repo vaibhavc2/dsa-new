@@ -122,6 +122,11 @@ inline void string_vector_input(vector<string> &v) {
         getline(cin, v[i]);
 }
 
+inline void string_vector_input_cin(vector<string> &v) {
+    for (int32_t i = 0; i < static_cast<int32_t>(v.size()); i++)
+        cin >> v[i];
+}
+
 inline void array_input(int32_t arr[], int32_t n) {
     for (int32_t i = 0; i < n; i++)
         cin >> arr[i];
@@ -140,62 +145,31 @@ inline void char_array_input(char arr[], int32_t n) {
 //*/*-------------- SOLUTION --------------*/*//
 // !! xxxxxxxx !! START FROM HERE !! xxxxxxxx !!
 /*
- * @lc app=leetcode id=26 lang=cpp
+ * @lc app=leetcode id=14 lang=cpp
  *
- * [26] Remove Duplicates from Sorted Array
+ * [14] Longest Common Prefix
  */
 
 // @lc code=start
 class Solution {
    public:
-    int removeDuplicates(vector<int> &nums) {}
+    string longestCommonPrefix(vector<string> &strs) {
+        string res = strs[0];
+
+        for (int i = 1; i < (int)strs.size(); i++) {
+            int j = 0;
+
+            while (j < (int)res.size() && j < (int)strs[i].size() && res[j] == strs[i][j]) j++;
+
+            res = res.substr(0, j);
+        }
+
+        return res;
+    }
 };
 // @lc code=end
 
 //*/*-------------- SOLUTIONS --------------*/*//
-
-// approach 1 - using set
-// time complexity - O(nlogn)
-// space complexity - O(n)
-class Solution1 {
-   public:
-    int removeDuplicates(vector<int> &nums) {
-        set<int> st;
-
-        for (auto it = nums.begin(); it != nums.end(); ++it) {
-            if (!st.empty() && st.find(*it) != st.end()) {
-                *it = 100000;
-            } else
-                st.emplace(*it);
-        }
-
-        sort(nums.begin(), nums.end());
-
-        return (int)st.size();
-    }
-};
-
-// 2 pointer approach
-// time complexity - O(n)
-// space complexity - O(1)
-class Solution2 {
-   public:
-    int removeDuplicates(vector<int> &nums) {
-        int n = (int)nums.size();
-        if (n < 2) return n;
-    
-        // two pointer approach - in place array modification
-        int j = 1;
-        // j -> index of next unique element, also the length of the new array
-        // i -> index of current element
-        for (int i = 1; i < n; ++i) {
-            if (nums[i] != nums[i - 1])
-                nums[j++] = nums[i];
-        }
-
-        return j;
-    }
-};
 
 //*/*-------------- SOLUTIONS --------------*/*//
 
@@ -203,17 +177,11 @@ inline void solve() {
     int n;
     input(n);
 
-    // string s;
-    // string_input(s);
-
-    vector<int32_t> v(n);
-    vector_input(v);
-
-    // vector<string> vs(n);
-    // string_array_input(vs);
+    vector<string> v(n);
+    string_vector_input_cin(v);
 
     Solution sol;
-    auto ans = sol.removeDuplicates(v);
+    auto ans = sol.longestCommonPrefix(v);
     cout << ans << endl;
 }
 

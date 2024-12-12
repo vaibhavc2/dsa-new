@@ -8,7 +8,10 @@
 using namespace std;
 
 #define endl "\n"
+/* Prefer 'using ll' in leetcode */
+// using ll = long long;
 // #define int long long
+
 #define fastIO()                      \
     ios_base::sync_with_stdio(false); \
     cin.tie(nullptr);                 \
@@ -140,81 +143,130 @@ inline void char_array_input(char arr[], int32_t n) {
 //*/*-------------- SOLUTION --------------*/*//
 // !! xxxxxxxx !! START FROM HERE !! xxxxxxxx !!
 /*
- * @lc app=leetcode id=26 lang=cpp
+ * @lc app=leetcode id=3152 lang=cpp
  *
- * [26] Remove Duplicates from Sorted Array
+ * [3152] Special Array II
  */
 
 // @lc code=start
 class Solution {
    public:
-    int removeDuplicates(vector<int> &nums) {}
+    vector<bool> isArraySpecial(vector<int> &nums, vector<vector<int>> &queries) {}
 };
 // @lc code=end
 
 //*/*-------------- SOLUTIONS --------------*/*//
 
-// approach 1 - using set
-// time complexity - O(nlogn)
-// space complexity - O(n)
+// Brute force : using special-array-i Q - TLE (Time Limit Exceeded)
+// Time: O(n * q), Space: O(1)
 class Solution1 {
-   public:
-    int removeDuplicates(vector<int> &nums) {
-        set<int> st;
+   private:
+    inline bool isSpecial(vector<int> &nums, int i, int n) {
+        int pi, pj;
+        if (i == n) return 1;
+        pi = pj = -1;
 
-        for (auto it = nums.begin(); it != nums.end(); ++it) {
-            if (!st.empty() && st.find(*it) != st.end()) {
-                *it = 100000;
-            } else
-                st.emplace(*it);
+        for (int j = i + 1; j <= n; ++i, ++j) {
+            if (pi == -1) pi = nums[i] % 2;
+            pj = nums[j] % 2;
+
+            if (pi == pj) return 0;
+
+            pi = pj;
         }
 
-        sort(nums.begin(), nums.end());
+        return 1;
+    }
 
-        return (int)st.size();
+   public:
+    vector<bool> isArraySpecial(vector<int> &nums, vector<vector<int>> &queries) {
+        vector<bool> res;
+
+        for (auto &q : queries) {
+            res.emplace_back(isSpecial(nums, q[0], q[1]));
+        }
+
+        return res;
     }
 };
 
-// 2 pointer approach
-// time complexity - O(n)
-// space complexity - O(1)
+// Prefix Sum - OPTIMAL
+// Time: O(n + q), Space: O(n)
 class Solution2 {
    public:
-    int removeDuplicates(vector<int> &nums) {
+    vector<bool> isArraySpecial(vector<int> &nums, vector<vector<int>> &queries) {
         int n = (int)nums.size();
-        if (n < 2) return n;
-    
-        // two pointer approach - in place array modification
-        int j = 1;
-        // j -> index of next unique element, also the length of the new array
-        // i -> index of current element
-        for (int i = 1; i < n; ++i) {
-            if (nums[i] != nums[i - 1])
-                nums[j++] = nums[i];
+        vector<int> prefixSum(n, 1);
+
+        for (int i = 1; i < n; i++) {
+            if ((nums[i] & 1) != (nums[i - 1] & 1))
+                prefixSum[i] += prefixSum[i - 1];
         }
 
-        return j;
+        // vector<bool> res;
+
+        // for (auto &q : queries) {
+        //     res.emplace_back(prefixSum[q[1]] >= q[1] - q[0] + 1);
+        // }
+
+        // equivalent to the above commented code, but faster for large queries - beats 100% submissions
+        vector<bool> res(queries.size());
+
+        for (size_t i = 0; i < queries.size(); i++) {
+            res[i] = prefixSum[queries[i][1]] >= queries[i][1] - queries[i][0] + 1;
+        }
+
+        return res;
+    }
+};
+
+// Prefix Sum & Special Count approach - OPTIMAL
+// Time: O(n + q), Space: O(n)
+class Solution3 {
+   public:
+    vector<bool> isArraySpecial(vector<int> &nums, vector<vector<int>> &queries) {
+        int n = (int)nums.size();
+        vector<int> prefix(n, 0);  // Initialize prefix array with size n
+
+        // Calculate the prefix array
+        for (int i = 1; i < n; i++) {
+            prefix[i] = prefix[i - 1];
+            if ((nums[i - 1] % 2 == 0 && nums[i] % 2 == 0) || (nums[i - 1] % 2 != 0 && nums[i] % 2 != 0)) {
+                prefix[i]++;
+            }
+        }
+
+        vector<bool> ans;  // Result vector
+
+        // Process the queries
+        for (auto &q : queries) {
+            int left = q[0], right = q[1];
+            int specialCount = prefix[right] - prefix[left];
+            ans.emplace_back(specialCount == 0);
+        }
+
+        return ans;  // Return the result
     }
 };
 
 //*/*-------------- SOLUTIONS --------------*/*//
 
 inline void solve() {
-    int n;
-    input(n);
+    int n1, n2;
 
-    // string s;
-    // string_input(s);
-
-    vector<int32_t> v(n);
+    cin >> n1;
+    vector<int> v(n1);
     vector_input(v);
 
-    // vector<string> vs(n);
-    // string_array_input(vs);
+    cin >> n2;
+    vector<vector<int>> q(n2, vector<int>(2, 0));
+    for (int i = 0; i < n2; i++)
+        cin >> q[i][0] >> q[i][1];
 
     Solution sol;
-    auto ans = sol.removeDuplicates(v);
-    cout << ans << endl;
+    auto ans = sol.isArraySpecial(v, q);
+    for (auto x : ans) cout << x << ' ';
+    cout << '\n';
 }
 
 int32_t main() {

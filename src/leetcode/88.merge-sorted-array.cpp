@@ -140,81 +140,85 @@ inline void char_array_input(char arr[], int32_t n) {
 //*/*-------------- SOLUTION --------------*/*//
 // !! xxxxxxxx !! START FROM HERE !! xxxxxxxx !!
 /*
- * @lc app=leetcode id=26 lang=cpp
+ * @lc app=leetcode id=88 lang=cpp
  *
- * [26] Remove Duplicates from Sorted Array
+ * [88] Merge Sorted Array
  */
 
 // @lc code=start
 class Solution {
    public:
-    int removeDuplicates(vector<int> &nums) {}
+    void merge(vector<int> &nums1, int m, vector<int> &nums2, int n) {}
 };
 // @lc code=end
 
 //*/*-------------- SOLUTIONS --------------*/*//
 
-// approach 1 - using set
-// time complexity - O(nlogn)
-// space complexity - O(n)
+// approach 1 - Two Pointers using extra space
+// Time - O(m+n), Space - O(m+n)
 class Solution1 {
    public:
-    int removeDuplicates(vector<int> &nums) {
-        set<int> st;
+    void merge(vector<int> &nums1, int m, vector<int> &nums2, int n) {
+        vector<int> copy1 = nums1;
+        int i = 0, j = 0, k = 0;
 
-        for (auto it = nums.begin(); it != nums.end(); ++it) {
-            if (!st.empty() && st.find(*it) != st.end()) {
-                *it = 100000;
-            } else
-                st.emplace(*it);
+        for (; i < m && j < n; k++) {
+            if (copy1[i] < nums2[j])
+                nums1[k] = copy1[i++];
+            else
+                nums1[k] = nums2[j++];
         }
 
-        sort(nums.begin(), nums.end());
+        while (k < m + n && i < m) {
+            nums1[k] = copy1[i++];
+            k++;
+        }
 
-        return (int)st.size();
+        while (k < m + n && j < n) {
+            nums1[k] = nums2[j++];
+            k++;
+        }
     }
 };
 
-// 2 pointer approach
-// time complexity - O(n)
-// space complexity - O(1)
+// approach 2 - Two Pointers without using extra space - OPTIMAL
+// Time - O(m+n), Space - O(1)
 class Solution2 {
    public:
-    int removeDuplicates(vector<int> &nums) {
-        int n = (int)nums.size();
-        if (n < 2) return n;
-    
-        // two pointer approach - in place array modification
-        int j = 1;
-        // j -> index of next unique element, also the length of the new array
-        // i -> index of current element
-        for (int i = 1; i < n; ++i) {
-            if (nums[i] != nums[i - 1])
-                nums[j++] = nums[i];
-        }
+    void merge(vector<int> &nums1, int m, vector<int> &nums2, int n) {
+        int i = m - 1;      // last element of nums1
+        int j = n - 1;      // last element of nums2
+        int k = m + n - 1;  // last index of nums1
 
-        return j;
+        // we will start from the end of both arrays and keep on comparing the elements, and put the greater element at the end of nums1, & decrement the respective pointers, & keep on doing this till we reach the start of nums2
+        while (j >= 0) {
+            if (i >= 0 && nums1[i] > nums2[j]) {
+                nums1[k--] = nums1[i--];
+            } else {
+                // this automatically handles the case when i < 0, and there are elements left in nums2, so all the remaining elements of nums2 will be copied to nums1
+                nums1[k--] = nums2[j--];
+            }
+        }
     }
 };
 
 //*/*-------------- SOLUTIONS --------------*/*//
 
 inline void solve() {
-    int n;
-    input(n);
+    int n1, n2;
+    cin >> n1 >> n2;
 
-    // string s;
-    // string_input(s);
-
-    vector<int32_t> v(n);
-    vector_input(v);
-
-    // vector<string> vs(n);
-    // string_array_input(vs);
+    vector<int32_t> v1(n1 + n2);
+    for (int i = 0; i < n1; i++) cin >> v1[i];
+    vector<int32_t> v2(n2);
+    vector_input(v2);
 
     Solution sol;
-    auto ans = sol.removeDuplicates(v);
-    cout << ans << endl;
+    sol.merge(v1, n1, v2, n2);
+    for (auto &i : v1) {
+        cout << i << " ";
+    }
+    cout << endl;
 }
 
 int32_t main() {

@@ -1,6 +1,8 @@
 // ---------- CP SETUP ---------- //
+#ifndef DEBUG
 #pragma GCC optimize("O3,unroll-loops")
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,lzcnt,abm,bmi,bmi2,mmx,avx,avx2,fma")
+#endif
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -146,27 +148,7 @@ inline void char_array_input(char arr[], int32_t n) {
 // @lc code=start
 class Solution {
    public:
-    int firstMissingPositive(vector<int> &nums) {
-        int n = (int)nums.size();
-
-        // Step 1: Place each number in its correct position if possible - using cyclic sort
-        for (int i = 0; i < n; i++) {
-            while (nums[i] > 0 && nums[i] <= n && nums[nums[i] - 1] != nums[i]) {
-                // Swap nums[i] with the number at its correct position nums[nums[i] - 1]
-                swap(nums[i], nums[nums[i] - 1]);
-            }
-        }
-
-        // Step 2: Find the first missing positive
-        for (int i = 0; i < n; i++) {
-            if (nums[i] != i + 1) {
-                return i + 1;
-            }
-        }
-
-        // If all numbers are in the correct positions, the missing number is n + 1
-        return n + 1;
-    }
+    int firstMissingPositive(vector<int> &nums) {}
 };
 // @lc code=end
 
@@ -347,8 +329,10 @@ inline void solve() {
 }
 
 int32_t main() {
+#ifndef DEBUG
     fastIO();
     DOUBLE();
+#endif
 
     int t = 1;
     cin >> t;

@@ -8,7 +8,10 @@
 using namespace std;
 
 #define endl "\n"
+/* Prefer 'using ll' in leetcode */
+// using ll = long long;
 // #define int long long
+
 #define fastIO()                      \
     ios_base::sync_with_stdio(false); \
     cin.tie(nullptr);                 \
@@ -140,80 +143,95 @@ inline void char_array_input(char arr[], int32_t n) {
 //*/*-------------- SOLUTION --------------*/*//
 // !! xxxxxxxx !! START FROM HERE !! xxxxxxxx !!
 /*
- * @lc app=leetcode id=26 lang=cpp
+ * @lc app=leetcode id=2109 lang=cpp
  *
- * [26] Remove Duplicates from Sorted Array
+ * [2109] Adding Spaces to a String
  */
 
 // @lc code=start
 class Solution {
    public:
-    int removeDuplicates(vector<int> &nums) {}
+    string addSpaces(string s, vector<int> &spaces) {
+        int l, m, n, i, j, k;
+        l = (int)s.size();
+        m = (int)spaces.size();
+
+        string res(l + m, ' ');
+        n = (int)res.size();
+
+        for (i = j = k = 0; i < l && k < n; k++) {
+            if (j < m && i == spaces[j])
+                j++;
+            else
+                res[k] = s[i++];
+        }
+
+        return res;
+    }
 };
 // @lc code=end
 
 //*/*-------------- SOLUTIONS --------------*/*//
 
-// approach 1 - using set
-// time complexity - O(nlogn)
-// space complexity - O(n)
 class Solution1 {
    public:
-    int removeDuplicates(vector<int> &nums) {
-        set<int> st;
+    string addSpaces(string s, vector<int> &spaces) {
+        int l, m, n, i, j, k;
+        l = (int)s.size();
+        m = (int)spaces.size();
 
-        for (auto it = nums.begin(); it != nums.end(); ++it) {
-            if (!st.empty() && st.find(*it) != st.end()) {
-                *it = 100000;
-            } else
-                st.emplace(*it);
+        string res(l + m, ' ');
+        n = (int)res.size();
+
+        for (i = j = k = 0; i < l && k < n; k++) {
+            if (j < m && i == spaces[j])
+                j++;
+            else
+                res[k] = s[i++];
         }
 
-        sort(nums.begin(), nums.end());
-
-        return (int)st.size();
+        return res;
     }
 };
 
-// 2 pointer approach
-// time complexity - O(n)
-// space complexity - O(1)
 class Solution2 {
-   public:
-    int removeDuplicates(vector<int> &nums) {
-        int n = (int)nums.size();
-        if (n < 2) return n;
-    
-        // two pointer approach - in place array modification
-        int j = 1;
-        // j -> index of next unique element, also the length of the new array
-        // i -> index of current element
-        for (int i = 1; i < n; ++i) {
-            if (nums[i] != nums[i - 1])
-                nums[j++] = nums[i];
+public:
+    string addSpaces(string s, vector<int>& spaces) {
+        // Final length of the result
+        int totalLength = s.size() + spaces.size(); 
+        // Pre-allocated buffer
+        char result[totalLength]; 
+        int sIndex = 0, spacesIndex = 0, resultIndex = 0;
+
+        while (sIndex < s.size()) {
+            if (spacesIndex < spaces.size() && sIndex == spaces[spacesIndex]) {
+                // Insert space at the correct position
+                result[resultIndex++] = ' '; 
+                spacesIndex++;
+            }
+            // Copy the current character
+            result[resultIndex++] = s[sIndex++]; 
         }
 
-        return j;
+        // Convert the buffer to a string
+        return string(result, totalLength); 
     }
 };
 
 //*/*-------------- SOLUTIONS --------------*/*//
 
 inline void solve() {
+    string s;
+    cin >> s;
+
     int n;
     input(n);
-
-    // string s;
-    // string_input(s);
 
     vector<int32_t> v(n);
     vector_input(v);
 
-    // vector<string> vs(n);
-    // string_array_input(vs);
-
     Solution sol;
-    auto ans = sol.removeDuplicates(v);
+    auto ans = sol.addSpaces(s, v);
     cout << ans << endl;
 }
 

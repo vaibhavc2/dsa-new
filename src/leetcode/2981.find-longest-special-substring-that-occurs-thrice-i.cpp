@@ -8,7 +8,10 @@
 using namespace std;
 
 #define endl "\n"
+/* Prefer 'using ll' in leetcode */
+// using ll = long long;
 // #define int long long
+
 #define fastIO()                      \
     ios_base::sync_with_stdio(false); \
     cin.tie(nullptr);                 \
@@ -140,80 +143,139 @@ inline void char_array_input(char arr[], int32_t n) {
 //*/*-------------- SOLUTION --------------*/*//
 // !! xxxxxxxx !! START FROM HERE !! xxxxxxxx !!
 /*
- * @lc app=leetcode id=26 lang=cpp
+ * @lc app=leetcode id=2981 lang=cpp
  *
- * [26] Remove Duplicates from Sorted Array
+ * [2981] Find Longest Special Substring That Occurs Thrice I
  */
 
 // @lc code=start
 class Solution {
    public:
-    int removeDuplicates(vector<int> &nums) {}
+    int maximumLength(string s) {
+        int cntTable[26][51] = {};
+        int n = (int)s.length();
+        int i, j, ans = 0;
+        for (i = 0; i < n; i++) {
+            char c = s[i];
+            for (j = i; j < n; j++) {
+                if (c == s[j]) {
+                    int len = j - i + 1;
+                    cntTable[c - 'a'][len]++;
+                    if (cntTable[c - 'a'][len] > 2) {
+                        ans = max(len, ans);
+                    }
+                } else
+                    break;
+            }
+        }
+        return ans == 0 ? -1 : ans;
+    }
 };
 // @lc code=end
 
 //*/*-------------- SOLUTIONS --------------*/*//
 
-// approach 1 - using set
-// time complexity - O(nlogn)
-// space complexity - O(n)
 class Solution1 {
    public:
-    int removeDuplicates(vector<int> &nums) {
-        set<int> st;
-
-        for (auto it = nums.begin(); it != nums.end(); ++it) {
-            if (!st.empty() && st.find(*it) != st.end()) {
-                *it = 100000;
-            } else
-                st.emplace(*it);
+    int maximumLength(string s) {
+        unordered_map<string, int> cntTable;
+        int n = (int)s.length();
+        int i, j, ans = 0;
+        for (i = 0; i < n; i++) {
+            string curr;
+            for (j = i; j < n; j++) {
+                if (curr.empty() or curr.back() == s[j]) {
+                    curr.push_back(s[j]);
+                    cntTable[curr]++;
+                    if (cntTable[curr] > 2) {
+                        ans = max((int)curr.length(), ans);
+                    }
+                } else
+                    break;
+            }
         }
-
-        sort(nums.begin(), nums.end());
-
-        return (int)st.size();
+        return ans == 0 ? -1 : ans;
     }
 };
 
-// 2 pointer approach
-// time complexity - O(n)
-// space complexity - O(1)
 class Solution2 {
    public:
-    int removeDuplicates(vector<int> &nums) {
-        int n = (int)nums.size();
-        if (n < 2) return n;
-    
-        // two pointer approach - in place array modification
-        int j = 1;
-        // j -> index of next unique element, also the length of the new array
-        // i -> index of current element
-        for (int i = 1; i < n; ++i) {
-            if (nums[i] != nums[i - 1])
-                nums[j++] = nums[i];
+    int maximumLength(string s) {
+        int cntTable[26][51] = {};
+        int n = (int)s.length();
+        int i, j, ans = 0;
+        for (i = 0; i < n; i++) {
+            string curr;
+            for (j = i; j < n; j++) {
+                if (curr.empty() or curr.back() == s[j]) {
+                    curr.push_back(s[j]);
+                    cntTable[curr[0] - 'a'][curr.length()]++;
+                    if (cntTable[curr[0] - 'a'][curr.length()] > 2) {
+                        ans = max((int)curr.length(), ans);
+                    }
+                } else
+                    break;
+            }
+        }
+        return ans == 0 ? -1 : ans;
+    }
+};
+
+class Solution3 {
+   public:
+    int maximumLength(string s) {
+        int cntTable[26][51] = {};
+        int n = (int)s.length();
+        int i, j, ans = 0;
+        for (i = 0; i < n; i++) {
+            char c = s[i];
+            for (j = i; j < n; j++) {
+                if (c == s[j]) {
+                    int len = j - i + 1;
+                    cntTable[c - 'a'][len]++;
+                    if (cntTable[c - 'a'][len] > 2) {
+                        ans = max(len, ans);
+                    }
+                } else
+                    break;
+            }
+        }
+        return ans == 0 ? -1 : ans;
+    }
+};
+
+class Solution4 {
+   public:
+    int maximumLength(string s) {
+        int cnt[26][60] = {};  // optimized hash table {since the constraints are small}
+        int l = 0, r = 1, ans = -1;
+        int n = (int)s.size();
+
+        while (r <= n) {
+            while (r < n && s[r] == s[l]) r++;
+            // either reach the end or not equal
+            for (int i = r - 1; i >= l; i--) {
+                int len = i - l + 1;
+                cnt[s[l] - 'a'][len] += r - i;
+                if (cnt[s[l] - 'a'][len] >= 3 && len > ans)
+                    ans = len;
+            }
+            l = r;
+            r++;
         }
 
-        return j;
+        return ans;
     }
 };
 
 //*/*-------------- SOLUTIONS --------------*/*//
 
 inline void solve() {
-    int n;
-    input(n);
-
-    // string s;
-    // string_input(s);
-
-    vector<int32_t> v(n);
-    vector_input(v);
-
-    // vector<string> vs(n);
-    // string_array_input(vs);
+    string s;
+    cin >> s;
 
     Solution sol;
-    auto ans = sol.removeDuplicates(v);
+    auto ans = sol.maximumLength(s);
     cout << ans << endl;
 }
 
@@ -226,8 +288,7 @@ int32_t main() {
     int t = 1;
     cin >> t;
 
-    while (t--)
-        solve();
+    while (t--) solve();
 
     return 0;
 }
