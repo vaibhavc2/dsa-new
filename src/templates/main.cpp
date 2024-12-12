@@ -1,19 +1,9 @@
 // ---------- CP SETUP ---------- //
-#ifndef DEBUG
-#pragma GCC optimize("O3,unroll-loops")
-#pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,lzcnt,abm,bmi,bmi2,mmx,avx,avx2,fma")
-#endif
-
 #include <bits/stdc++.h>
 using namespace std;
 
 #define endl '\n'
 #define cerr cerr << "ERROR :: "
-
-#define fastIO()                      \
-    ios_base::sync_with_stdio(false); \
-    cin.tie(nullptr);                 \
-    cout.tie(nullptr)
 
 #define db_precision numeric_limits<double>::digits10 + 1
 #define DOUBLE()                  \
@@ -457,6 +447,24 @@ void parse_input(stringstream &ss, Args &...args) {
 
 // @lc code=start
 
+// ------------- OPTIMIZATIONS -------------
+
+#ifndef LOCAL_PROJECT
+#pragma GCC optimize("O3,unroll-loops")
+#pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,lzcnt,abm,bmi,bmi2,mmx,avx,avx2,fma")
+#endif
+
+#ifndef DEBUG
+auto fastIO = []() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+    return 0;
+}();
+#endif
+
+// ------------- CODE -------------
+
 // int a[10000] = {0};
 // const int MOD = 1e9+7;
 // const int _MOD = 998244353;
@@ -499,30 +507,25 @@ void solve() {
 }
 
 int32_t main() {
-#ifndef DEBUG
-    fastIO();
-#endif
     DOUBLE();
-
-    int t = 1, n;
+    int t = 1;
     cin >> t;
-    n = t;
 
-    // while (t--) solve();
-
-    const int timeout_seconds = 5;  // in seconds
-
-    while (t--) {
+#ifdef DEBUG
+    while (t--) solve();
+#else
+    const int timeout_seconds = 5;
+    for (int test_case = 1; test_case <= t; ++test_case) {
         auto future = async(launch::async, solve);  // Run solve() in a separate thread
 
         if (future.wait_for(chrono::seconds(timeout_seconds)) == future_status::timeout) {
-            cerr << "Time Limit Exceeded at 'Test case: " << n - t << "'\n";
-
+            cerr << "Time Limit Exceeded at 'Test case: " << test_case << "'\n";
             exit(0);  // exit the program
         }
     }
+#endif
 
     return 0;
 }
 
-// ********************** END *********************
+// ------------- END -------------
