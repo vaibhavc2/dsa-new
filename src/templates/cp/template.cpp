@@ -181,6 +181,8 @@ template<typename T> constexpr T getRandomNumber(T l, T r) { return uniform_int_
 // #define M() { cout << "Marichka" << endl;return; }
 // #define Z() { cout << "Zenyk" << endl;return; }
 
+inline auto sort_desc = [](auto &vec) { sort(all(vec), greater<>()); };
+
 constexpr const bool INPUT_TESTCASE_NUMBER = 1;
 
 #define N ((int) 2e5+5)

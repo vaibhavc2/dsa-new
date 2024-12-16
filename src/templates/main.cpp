@@ -360,87 +360,6 @@ inline void input(InputMethod method, Args &...args) {
     (_input(args, method), ...);
 }
 
-template <typename T>
-T parse_token(stringstream &ss, char delimiter = ' ') {
-    string token;
-    if (!getline(ss, token, delimiter)) {
-        throw runtime_error("Failed to parse token");
-    }
-    stringstream value_stream(token);
-    T value;
-    value_stream >> value;
-    if (value_stream.fail()) {
-        throw invalid_argument("Invalid type conversion");
-    }
-    return value;
-}
-
-template <typename T>
-vector<T> parse_array(stringstream &ss, char open_bracket = '[', char close_bracket = ']', char delimiter = ',') {
-    vector<T> result;
-    char ch;
-
-    ss >> ch;
-    if (ch != open_bracket) throw invalid_argument("Invalid array format");
-
-    while (true) {
-        if (ss.peek() == close_bracket) {
-            ss.get();
-            break;
-        }
-        result.push_back(parse_token<T>(ss, delimiter));
-        if (ss.peek() == delimiter) ss.get();
-    }
-
-    return result;
-}
-
-template <typename T>
-vector<vector<T>> parse_nested_array(stringstream &ss, char open_bracket = '[', char close_bracket = ']', char delimiter = ',') {
-    vector<vector<T>> result;
-    char ch;
-
-    ss >> ch;
-    if (ch != open_bracket) throw invalid_argument("Invalid nested array format");
-
-    while (true) {
-        if (ss.peek() == close_bracket) {
-            ss.get();
-            break;
-        }
-        result.push_back(parse_array<T>(ss, open_bracket, close_bracket, delimiter));
-        if (ss.peek() == delimiter) ss.get();
-    }
-
-    return result;
-}
-
-template <typename T>
-void parse_single_input(stringstream &ss, T &var) {
-    if constexpr (is_same_v<T, vector<typename T::value_type>>) {
-        var = parse_array<typename T::value_type>(ss);
-    } else if constexpr (is_same_v<T, vector<vector<typename T::value_type::value_type>>>) {
-        var = parse_nested_array<typename T::value_type::value_type>(ss);
-    } else {
-        ss >> var;
-    }
-}
-
-template <typename T>
-vector<T> parse_space_separated_array(stringstream &ss) {
-    vector<T> result;
-    T value;
-    while (ss >> value) {
-        result.push_back(value);
-    }
-    return result;
-}
-
-template <typename... Args>
-void parse_input(stringstream &ss, Args &...args) {
-    (parse_single_input(ss, args), ...);
-}
-
 // !! xxxxxxxx !! START FROM HERE !! xxxxxxxx !!
 
 //*/*-------------- SOLUTION --------------*/*//
@@ -452,9 +371,7 @@ void parse_input(stringstream &ss, Args &...args) {
 #ifndef LOCAL_PROJECT
 #pragma GCC optimize("O3,unroll-loops")
 #pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,lzcnt,abm,bmi,bmi2,mmx,avx,avx2,fma")
-#endif
 
-#ifndef DEBUG
 auto fastIO = []() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
@@ -465,18 +382,22 @@ auto fastIO = []() {
 
 // ------------- CODE -------------
 
-// int a[10000] = {0};
+// const int N = 1e5+1;
+// int a[N];
 // const int MOD = 1e9+7;
 // const int _MOD = 998244353;
 // const double EPS = 1e-9;
 // const long long INF = 2e18;
 // const int mxN = 2e5+5;
 // const double PI = 4 * atan(1);
-// using ll = long long;
+using ll = long long;
+namespace rng = std::ranges;
+#define sz(x) ((int)(x).size())
+#define all(x) (x).begin(), (x).end()
 
 class Solution {
    public:
-    int func(int n) {
+    int func(int &n) {
         return n;
     }
 };
@@ -493,13 +414,8 @@ void solve() {
     vector<int> v;
     vector<vector<int>> vv;
 
-    input(Standard, x, v, vv);
-    input(Line, s);
-
-    // string line;
-    // getline(cin, line);
-    // stringstream ss(line);
-    // parse_input(ss, x, v, vv, s);
+    input(Standard, v, x);
+    // input(Line, s);
 
     Solution sol;
     auto ans = sol.func(x);
