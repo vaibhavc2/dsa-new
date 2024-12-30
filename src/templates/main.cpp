@@ -364,6 +364,7 @@ inline void input(InputMethod method, Args &...args) {
 
 //*/*-------------- SOLUTION --------------*/*//
 
+// ******* START *******
 // @lc code=start
 
 // ------------- OPTIMIZATIONS -------------
@@ -403,6 +404,7 @@ class Solution {
 };
 
 // @lc code=end
+// ******* END *******
 
 //*/*-------------- SOLUTIONS --------------*/*//
 
