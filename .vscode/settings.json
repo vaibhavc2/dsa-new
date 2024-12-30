@@ -154,6 +154,11 @@
                 "autoFold": true
             },
             {
+                "begin": "// ******* START *******",
+                "end": "// ******* END *******",
+                "autoFold": true
+            },
+            {
                 "beginRegex": "#if(?:n?def)?",
                 "middleRegex": "#el(?:se|if)",
                 "endRegex": "#endif",
@@ -171,6 +176,14 @@
         "editor.wordWrap": "off"
     },
     "[Log]": {
+        "editor.fontSize": 12,
+        "editor.fontFamily": "'SF Mono', monospace",
+        "editor.lineHeight": 0,
+        "editor.minimap.enabled": false,
+        "editor.glyphMargin": false,
+        "editor.wordWrap": "on"
+    },
+    "[log]": {
         "editor.fontSize": 12,
         "editor.fontFamily": "'SF Mono', monospace",
         "editor.lineHeight": 0,
